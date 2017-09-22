@@ -3,8 +3,9 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
-use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Http\Models\Pacient;
+use Illuminate\Support\Facades\DB;
 
 class PacientsController extends Controller
 {
@@ -14,10 +15,23 @@ class PacientsController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function addPacient()
+    public function addPacient(Request $request)
     {
-        $data = \Request::all();
-        print_r($data);
-        #return 'teste';
+        $pacient= new Pacient();
+        $pacient->name= $request['name'];
+        $pacient->genre= $request['genre'];
+        $pacient->phone= $request['phone'];
+        $pacient->address= $request['address'];
+
+        $pacient->save();
+
+        return view('home');
+
+    }
+
+    public function list()
+    {
+        $pacients = DB::table('pacients')->get();
+        return view('pacients.list',['pacients' => $pacients]);
     }
 }

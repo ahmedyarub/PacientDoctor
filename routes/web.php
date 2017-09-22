@@ -12,12 +12,16 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
 });
 
 
 Route::get('/doctors/form', function () { return view('doctors.doctorForm');});
 Route::post('/doctors/add', 'DoctorsController@addDoctor');
+Route::get('/doctors/list', 'DoctorsController@list');
+Route::get('/doctors/edit', 'DoctorsController@list');
+Route::get('/doctors/delete', 'DoctorsController@list');
 
-Route::get('/pacient/form', function () { return view('pacients.pacientForm');});
-Route::post('/pacient/add', 'PacientsController@addPacient');
+Route::get('/pacients/form', function () { return view('pacients.pacientForm');});
+Route::post('/pacients/add', 'PacientsController@addPacient');
+Route::get('/pacients/list', 'PacientsController@list');
