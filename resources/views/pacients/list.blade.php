@@ -1,20 +1,24 @@
-<?php
-echo '<table>
-<tr>
-    <th>Name</th>
-    <th>Genre</th>
-    <th>Phone</th>
-  </tr>';
-foreach ($pacients as $pacient) {
-    echo "<tr>
-            <td>$pacient->name</td>
-            <td>$pacient->genre</td>
-            <td>$pacient->phone</td>
-            <td><a href='edit/$pacient->id'>edit</a></td>
-            <td><a href='delete/$pacient->id'>delete</a></td>
-          </tr>";
+<table>
+    <tr>
+        <th>{{ __("Name")}}</th>
+        <th>{{ __("Genre")}}</th>
+        <th>{{ __("Birth")}}</th>
+        <th>{{ __("Email")}}</th>
+        <th>{{ __("Phone")}}</th>
+        <th colspan="2">{{ __("Actions")}}</th>
+    </tr>
+@foreach ($pacients as $pacient)
+    <tr>
+            <td>{{$pacient->name}}</td>
+            <td>{{$pacient->genre}}</td>
+            <td>{{$pacient->birth}}</td>
+            <td>{{$pacient->email}}</td>
+            <td>{{$pacient->phone}}</td>
+            <td><a href='edit/{{$pacient->id}}'>{{ __('Edit')}}</a></td>
+            <td><a href='delete/{{$pacient->id}}'>{{ __('Delete')}}</a></td>
+          </tr>
 
 
 
-}
-echo '</table>';
+@endforeach
+</table>

@@ -10,21 +10,27 @@ use Illuminate\Support\Facades\Hash;
 
 class PacientsController extends Controller
 {
-    /**
-     * Show the profile for the given user.
-     *
-     * @param  int  $id
-     * @return Response
-     */
+
     public function addPacient(Request $request)
     {
-        $pacient= new Pacient();
+
+        $pacient = $request->validate([
+            'name' => 'required',
+            'genre'=> 'required',
+            'address'=> 'required',
+            'email'=> 'required',
+            'password'=> 'required',
+
+            'phone'=> 'required',
+        ]);
+
         $pacient->name= $request['name'];
         $pacient->genre= $request['genre'];
-        $pacient->phone= $request['phone'];
         $pacient->address= $request['address'];
+        $pacient->birth= $request['birth'];
         $pacient->email = $request['email'];
         $pacient->password= Hash::make($request['password']);
+        $pacient->phone= $request['phone'];
 
         $pacient->save();
 
