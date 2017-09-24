@@ -8,6 +8,12 @@
             {{ Form::label('crm', 'CRM', array('class'=>'control-label')) }}
             {{ Form::text('crm') }}
     <br />
+            {{ Form::label('email', 'Email', array('class'=>'control-label')) }}
+            {{ Form::text('email') }}
+    <br />
+            {{ Form::label('password', 'Password', array('class'=>'control-label')) }}
+            {{ Form::password('password') }}
+    <br />
             {{ Form::label('address', 'Address', array('class'=>'control-label')) }}
             {{ Form::text('address') }}
     <br />

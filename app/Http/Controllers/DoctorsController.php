@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Models\Doctor;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class DoctorsController extends Controller
 {
@@ -18,6 +19,8 @@ class DoctorsController extends Controller
         $doctor->crm= $request['crm'];
         $doctor->phone= $request['phone'];
         $doctor->address= $request['address'];
+        $doctor->email = $request['email'];
+        $doctor->password= Hash::make($request['password']);
 
         $doctor->save();
 

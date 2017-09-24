@@ -11,6 +11,12 @@
             {{ Form::label('phone', 'Phone Number', array('class'=>'control-label')) }}
             {{ Form::text('phone') }}
     <br />
+            {{ Form::label('email', 'Email', array('class'=>'control-label')) }}
+            {{ Form::text('email') }}
+    <br />
+            {{ Form::label('password', 'Password', array('class'=>'control-label')) }}
+            {{ Form::password('password') }}
+    <br />
             {{ Form::label('genre', 'Genre', array('class'=>'control-label')) }}
             {{ Form::text('genre') }}
     <br />

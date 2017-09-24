@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Models\Pacient;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class PacientsController extends Controller
 {
@@ -22,6 +23,8 @@ class PacientsController extends Controller
         $pacient->genre= $request['genre'];
         $pacient->phone= $request['phone'];
         $pacient->address= $request['address'];
+        $pacient->email = $request['email'];
+        $pacient->password= Hash::make($request['password']);
 
         $pacient->save();
 
