@@ -17,7 +17,7 @@
             {{ Form::text('crm') }}
     <br />
             {{ Form::label('email', __('Email'), array('class'=>'control-label')) }}
-            {{ Form::text('email') }}
+            {{ Form::text('email','', array('id'=> 'email')) }}
     <br />
             {{ Form::label('password', __('Password'), array('class'=>'control-label')) }}
             {{ Form::password('password') }}

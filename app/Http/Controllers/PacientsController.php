@@ -18,12 +18,12 @@ class PacientsController extends Controller
             'name' => 'required',
             'genre'=> 'required',
             'address'=> 'required',
-            'email'=> 'required',
+            'email'=> 'required|email',
             'password'=> 'required',
-
+            'birth'=> 'required',
             'phone'=> 'required',
         ]);
-
+        $pacient = new Pacient();
         $pacient->name= $request['name'];
         $pacient->genre= $request['genre'];
         $pacient->address= $request['address'];

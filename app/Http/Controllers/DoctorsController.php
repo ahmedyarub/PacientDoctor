@@ -19,21 +19,21 @@ class DoctorsController extends Controller
             'name' => 'required',
             'crm'=> 'required|numeric',
             'address'=> 'required',
-            'email'=> 'required',
+            'email'=> 'required|email',
             'state'=> 'required',
             'city'=> 'required',
             'password'=> 'required',
             'phone'=> 'required',
         ]);
-
-        $doctor->name= $request['name'];
-        $doctor->crm= $request['crm'];
-        $doctor->phone= $request['phone'];
-        $doctor->address= $request['address'];
+        $doctor = new Doctor();
+        $doctor->name = $request['name'];
+        $doctor->crm = $request['crm'];
+        $doctor->phone = $request['phone'];
+        $doctor->address = $request['address'];
         $doctor->state = $request['state'];
         $doctor->city = $request['city'];
         $doctor->email = $request['email'];
-        $doctor->password= Hash::make($request['password']);
+        $doctor->password = Hash::make($request['password']);
 
         $doctor->save();
 
