@@ -1,0 +1,18 @@
+{
+  "Name": "Nome",
+  "CRM": "CRM",
+  "Address": "Endereço",
+  "Email": "Email",
+  "Phone": "Telefone",
+  "Save": "Salvar",
+  "Genre": "Sexo",
+  "Password": "Senha",
+  "Edit": "Editar",
+  "Delete": "Deletar",
+  "Add a Doctor": "Adicione um Médico",
+  "Add a Pacient": "Adicione um Paciente",
+  "Actions": "Ações",
+  "State": "Estado",
+  "City": "Cidade",
+  "Birth": "Data de Nascimento"
+}
