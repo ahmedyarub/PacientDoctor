@@ -68,4 +68,14 @@ class RegisterController extends Controller
             'password' => bcrypt($data['password']),
         ]);
     }
+
+    public function verify($token)
+    {
+        // The verified method has been added to the user model and chained here
+        // for better readability
+        $user = User::where('email_token',$token)->firstOrFail();
+        $user->verified();
+
+        return redirect('login');
+    }
 }

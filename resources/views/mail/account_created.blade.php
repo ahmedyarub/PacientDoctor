@@ -1,0 +1,1 @@
+Activation link: {{ Html::link(url('register/verify/'.$user->email_token)) }}

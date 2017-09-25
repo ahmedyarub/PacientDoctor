@@ -3,18 +3,24 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Models\Pacient;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Mail;
 
 class PacientsController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware('auth')->except(['addPacient']);
+    }
+
     public function addPacient(Request $request)
     {
-
-        $pacient = $request->validate([
+        $request->validate([
             'name' => 'required',
             'genre'=> 'required',
             'address'=> 'required',
@@ -23,16 +29,34 @@ class PacientsController extends Controller
             'birth'=> 'required',
             'phone'=> 'required',
         ]);
+
+        DB::beginTransaction();
+
+        $user = new User();
+
+        $user->email = $request['email'];
+        $user->password = Hash::make($request['password']);
+        $user->email_token = str_random(10);
+
+        $user->save();
+
         $pacient = new Pacient();
         $pacient->name= $request['name'];
         $pacient->genre= $request['genre'];
         $pacient->address= $request['address'];
         $pacient->birth= $request['birth'];
-        $pacient->email = $request['email'];
-        $pacient->password= Hash::make($request['password']);
         $pacient->phone= $request['phone'];
 
         $pacient->save();
+
+        $email = new EmailVerification($user);
+
+        $email->from('naoresponder@veus.com.br');
+        $email->subject('Activation Email');
+
+        Mail::to($user->email)->send($email);
+
+        DB::commit();
 
         return view('home');
 

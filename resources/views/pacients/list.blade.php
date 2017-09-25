@@ -1,6 +1,6 @@
 <table>
     <tr>
-        <th>{{ __("Name")}}</th>
+        <th>@lang("Name")</th>
         <th>{{ __("Genre")}}</th>
         <th>{{ __("Birth")}}</th>
         <th>{{ __("Email")}}</th>

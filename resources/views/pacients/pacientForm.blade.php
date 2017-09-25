@@ -1,4 +1,4 @@
-@extends('layouts.js')
+@extends('layouts.app')
     <h1>{{__('Add a Pacient')}}</h1>
     @if ($errors->any())
         <div class="alert alert-danger">

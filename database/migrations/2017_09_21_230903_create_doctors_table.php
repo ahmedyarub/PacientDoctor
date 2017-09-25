@@ -15,7 +15,18 @@ class CreateDoctorsTable extends Migration
     {
         Schema::create('doctors', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('user_id');
+            $table->string('name');
+            $table->string('crm');
+            $table->string('phone');
+            $table->string('address');
+            $table->string('state');
+            $table->string('city');
             $table->timestamps();
+        });
+
+        Schema::table('doctors', function(Blueprint $table) {
+            $table->foreign('user_id', 'fk_doctors_users_id')->on('users')->references('id')->onDelete('restrict')->onUpdate('restrict');
         });
     }
 
@@ -26,6 +37,6 @@ class CreateDoctorsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('doctors');
+        Schema::drop('doctors');
     }
 }
