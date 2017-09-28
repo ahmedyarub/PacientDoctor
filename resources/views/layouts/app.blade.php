@@ -1,3 +1,7 @@
+<?php
+$controller = (new ReflectionClass(\Route::getCurrentRoute()->getController()))->getShortName();
+list(, $action) = explode('@', Route::getCurrentRoute()->getActionName());
+?>
 <!DOCTYPE html>
 <!--[if lt IE 7]>
 <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
@@ -80,9 +84,16 @@
                     </div>
                     <div class="col-md-9 main-nav">
                         <ul class="nav text-right">
-                            <li><a href="index.html"><span>Home</span></a></li>
-                            <li class="active"><a href="services.html">Services</a></li>
-                            <li><a href="product.html">Products</a></li>
+                            <li class="{{in_array($controller, ["LoginController"])?"active":""}}">
+                                <a href="{{URL::action("Auth\LoginController@login")}}"><span>Login</span></a>
+                            </li>
+                            <li><a href="services.html">Services</a></li>
+                            <li class="{{in_array($controller, ["DoctorsController"])?"active":""}}">
+                                <a href="{{URL::action("DoctorsController@form")}}">Doctor Registration</a>
+                            </li>
+                            <li class="{{in_array($controller, ["PacientsController"])?"active":""}}">
+                                <a href="{{URL::action("PacientsController@form")}}">Patient Registration</a>
+                            </li>
                             <li><a href="about.html">About</a></li>
                             <li><a href="contact.html">Contact</a></li>
                         </ul>

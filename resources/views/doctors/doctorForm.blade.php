@@ -14,7 +14,7 @@
         </div><br/>
     @endif
     {{ Form::open(array("action" => "DoctorsController@addDoctor")) }}
-    {{ Form::label('name', __('Name'), array('class'=>'control-label')) }}
+    {{ Form::label('name', Lang::get('Name'), array('class'=>'control-label')) }}
     {{ Form::text('name') }}
     <br/>
     {{ Form::label('crm', __('CRM'), array('class'=>'control-label')) }}

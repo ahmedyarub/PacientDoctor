@@ -15,7 +15,11 @@ class PacientsController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth')->except(['addPacient']);
+        $this->middleware('auth')->except(['form', 'addPacient']);
+    }
+
+    public function form(){
+        return view('pacients.pacientForm');
     }
 
     public function addPacient(Request $request)

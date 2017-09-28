@@ -16,21 +16,25 @@ class DoctorsController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth')->except(['addDoctor']);
+        $this->middleware('auth')->except(['form', 'addDoctor']);
     }
 
+    public function form()
+    {
+        return view('doctors.doctorForm');
+    }
 
     public function addDoctor(Request $request)
     {
         $request->validate([
             'name' => 'required',
-            'crm'=> 'required|numeric',
-            'address'=> 'required',
-            'email'=> 'required|email',
-            'state'=> 'required',
-            'city'=> 'required',
-            'password'=> 'required',
-            'phone'=> 'required',
+            'crm' => 'required|numeric',
+            'address' => 'required',
+            'email' => 'required|email',
+            'state' => 'required',
+            'city' => 'required',
+            'password' => 'required',
+            'phone' => 'required',
         ]);
 
         DB::beginTransaction();
@@ -67,13 +71,12 @@ class DoctorsController extends Controller
         return view('home');
 
 
-
     }
 
     public function list()
     {
         $doctors = DB::table('doctors')->get();
 
-        return view('doctors.list',['doctors' => $doctors]);
+        return view('doctors.list', ['doctors' => $doctors]);
     }
 }

@@ -16,16 +16,15 @@ Route::get('/', function () {
 });
 
 Auth::routes();
+Route::get('/logout', 'Auth\LoginController@logout');
 
-Route::get('/doctors/form', function () {
-    return view('doctors.doctorForm');
-});
+Route::get('/doctors/form', 'DoctorsController@form');
 Route::post('/doctors/add', 'DoctorsController@addDoctor');
 Route::get('/doctors/list', 'DoctorsController@list');
 Route::get('/doctors/edit', 'DoctorsController@list');
 Route::get('/doctors/delete', 'DoctorsController@list');
 
-Route::get('/pacients/form', function () { return view('pacients.pacientForm');});
+Route::get('/pacients/form', 'PacientsController@form');
 Route::post('/pacients/add', 'PacientsController@addPacient');
 Route::get('/pacients/list', 'PacientsController@list');
 
