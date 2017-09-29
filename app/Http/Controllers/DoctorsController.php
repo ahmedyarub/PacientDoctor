@@ -79,4 +79,11 @@ class DoctorsController extends Controller
 
         return view('doctors.list', ['doctors' => $doctors]);
     }
+
+    public function delete($id)
+    {
+        DB::table('doctors')->delete($id);
+
+        return view('home');
+    }
 }

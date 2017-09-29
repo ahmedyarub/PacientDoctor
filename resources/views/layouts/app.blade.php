@@ -220,10 +220,10 @@ list(, $action) = explode('@', Route::getCurrentRoute()->getActionName());
     $(document).ready(function () {
         $('#phone').mask('9999-9999');
         $('#birth').mask('99/99/9999');
-        $('#email').mask(" A", {
+      /*  $('#email').mask(" A", {
             translation: {
                 "A": {pattern: /[\w@\-.+]/, recursive: true}
             }
-        });
+        });*/
     });
 </script>

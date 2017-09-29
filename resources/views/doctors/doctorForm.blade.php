@@ -14,16 +14,16 @@
         </div><br/>
     @endif
     {{ Form::open(array("action" => "DoctorsController@addDoctor")) }}
-    {{ Form::label('name', Lang::get('Name'), array('class'=>'control-label')) }}
+    {{ Form::label('name', Lang::get('doctors.Name'), array('class'=>'control-label')) }}
     {{ Form::text('name') }}
     <br/>
-    {{ Form::label('crm', __('CRM'), array('class'=>'control-label')) }}
+    {{ Form::label('crm', Lang::get('doctors.Crm'), array('class'=>'control-label')) }}
     {{ Form::text('crm') }}
     <br/>
     {{ Form::label('email', __('Email'), array('class'=>'control-label')) }}
     {{ Form::text('email','', ['id'=> 'email1']) }}
     <br/>
-    {{ Form::label('password', __('Password'), array('class'=>'control-label')) }}
+    {{ Form::label('password', @('Password'), array('class'=>'control-label')) }}
     {{ Form::password('password') }}
     <br/>
     {{ Form::label('address', __('Address'), array('class'=>'control-label')) }}

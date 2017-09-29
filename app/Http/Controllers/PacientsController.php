@@ -45,6 +45,8 @@ class PacientsController extends Controller
         $user->save();
 
         $pacient = new Pacient();
+
+        $pacient->user_id = $user->id;
         $pacient->name= $request['name'];
         $pacient->genre= $request['genre'];
         $pacient->address= $request['address'];
@@ -70,5 +72,12 @@ class PacientsController extends Controller
     {
         $pacients = DB::table('pacients')->get();
         return view('pacients.list',['pacients' => $pacients]);
+    }
+
+    public function delete($id)
+    {
+        DB::table('pacients')->delete($id);
+
+        return view('home');
     }
 }
