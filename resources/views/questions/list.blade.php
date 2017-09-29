@@ -1,17 +1,24 @@
-<table>
-    <tr>
-        <th>{{ __("Question")}}</th>
-        <th>{{ __("Category")}}</th>
-        <th colspan="2">{{ __("Actions")}}</th>
-    </tr>
+@extends('layouts.app')
 
-    @foreach ($questions as $question)
+@section('title', 'Questions List')
+
+@section('content')
+    <h1>{{__('Questions')}}</h1>
+    <table>
         <tr>
-            <td>{{$question->question}}</td>
-            <td>{{$question->category}}</td>
-            <td><a href='edit/{{$question->id}}'>{{ __('Edit')}}</a></td>
-            <td><a href='delete/{{$question->id}}'>{{ __('Delete')}}</a></td>
+            <th>{{ __("Question")}}</th>
+            <th>{{ __("Category")}}</th>
+            <th colspan="2">{{ __("Actions")}}</th>
         </tr>
-    @endforeach
 
-</table>
+        @foreach ($questions as $question)
+            <tr>
+                <td>{{$question->question}}</td>
+                <td>{{$question->category}}</td>
+                <td><a href='edit/{{$question->id}}'>{{ __('Edit')}}</a></td>
+                <td><a href='delete/{{$question->id}}'>{{ __('Delete')}}</a></td>
+            </tr>
+        @endforeach
+
+    </table>
+@endsection

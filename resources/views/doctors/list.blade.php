@@ -1,21 +1,28 @@
-<table>
-    <tr>
-        <th>{{ __("Name")}}</th>
-        <th>{{ __("CRM")}}</th>
-        <th>{{ __("Email")}}</th>
-        <th>{{ __("Phone")}}</th>
-        <th colspan="2">{{ __("Actions")}}</th>
-    </tr>
+@extends('layouts.app')
 
-@foreach ($doctors as $doctor)
-    <tr>
-        <td>{{$doctor->name}}</td>
-        <td>{{$doctor->crm}}</td>
-        <td>{{$doctor->email}}</td>
-        <td>{{$doctor->phone}}</td>
-        <td><a href='edit/{{$doctor->id}}'>{{ __('Edit')}}</a></td>
-        <td><a href='delete/{{$doctor->id}}'>{{ __('Delete')}}</a></td>
-    </tr>
-@endforeach
+@section('title', 'Doctors List')
 
-</table>
+@section('content')
+    <h1>{{__('Doctors')}}</h1>
+    <table>
+        <tr>
+            <th>{{ __("Name")}}</th>
+            <th>{{ __("CRM")}}</th>
+            <th>{{ __("Email")}}</th>
+            <th>{{ __("Phone")}}</th>
+            <th colspan="2">{{ __("Actions")}}</th>
+        </tr>
+
+    @foreach ($doctors as $doctor)
+        <tr>
+            <td>{{$doctor->name}}</td>
+            <td>{{$doctor->crm}}</td>
+            <td>{{$doctor->email}}</td>
+            <td>{{$doctor->phone}}</td>
+            <td><a href='edit/{{$doctor->id}}'>{{ __('Edit')}}</a></td>
+            <td><a href='delete/{{$doctor->id}}'>{{ __('Delete')}}</a></td>
+        </tr>
+    @endforeach
+
+    </table>
+@endsection

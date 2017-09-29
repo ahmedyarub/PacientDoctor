@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: albert
- * Date: 21/09/17
- * Time: 18:19
- */
+
 echo 'Doctors';
 echo '<br />';
 echo link_to('/doctors/list', $title = 'list Doctors', $attributes = array(), $secure = null);
@@ -28,3 +23,8 @@ echo '<br />';
 echo link_to('/questions/list', $title = 'list questions', $attributes = array(), $secure = null);
 echo '<br />';
 echo link_to('/questions/form', $title = 'add a question', $attributes = array(), $secure = null);
+echo 'Answers';
+echo '<br />';
+echo link_to('/answers/list', $title = 'list answers', $attributes = array(), $secure = null);
+echo '<br />';
+echo link_to('/answers/form', $title = 'add a answer', $attributes = array(), $secure = null);
