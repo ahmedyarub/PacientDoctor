@@ -2,7 +2,7 @@
 $controller = (new ReflectionClass(\Route::getCurrentRoute()->getController()))->getShortName();
 list(, $action) = explode('@', Route::getCurrentRoute()->getActionName());
 ?>
-<!DOCTYPE html>
+        <!DOCTYPE html>
 <!--[if lt IE 7]>
 <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>
@@ -14,7 +14,7 @@ list(, $action) = explode('@', Route::getCurrentRoute()->getActionName());
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Narrow &mdash; 100% Free Fully Responsive HTML5 Template by FREEHTML5.co</title>
+    <title>Pacients & Doctors System</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Free HTML5 Template by FREEHTML5.CO"/>
     <meta name="keywords" content="free html5, free template, free bootstrap, html5, css3, mobile first, responsive"/>
@@ -79,7 +79,7 @@ list(, $action) = explode('@', Route::getCurrentRoute()->getActionName());
                 <div class="row">
                     <div class="col-md-3">
                         <div class="fh5co-navbar-brand">
-                            <a class="fh5co-logo" href="index.html">Narrow</a>
+                            <a class="fh5co-logo" href="index.html">Pacients & Doctors </a>
                         </div>
                     </div>
                     <div class="col-md-9 main-nav">
@@ -103,75 +103,9 @@ list(, $action) = explode('@', Route::getCurrentRoute()->getActionName());
         </div>
     </header>
     <!-- END: header -->
-@yield('content')
-</div>
-<!-- END fh5co-intro-section -->
-    <div id="fh5co-section">
+    <div id="fh5co-contact-section">
         <div class="container">
-            <div class="row">
-                <div class="col-md-10 col-md-offset-1">
-                    <div class="col-md-6 animate-box">
-                        <div class="fh5co-inner fh5co-services">
-                            <i class="icon-heart"></i>
-                            <div class="holder-section">
-                                <h3>Crafted With Love</h3>
-                                <p>Far far away, behind the word mountains, far from the countries Vokalia and
-                                    Consonantia, there live the blind texts. </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 animate-box">
-                        <div class="fh5co-inner fh5co-services">
-                            <i class="icon-laptop"></i>
-                            <div class="holder-section">
-                                <h3>Web Developement</h3>
-                                <p>Far far away, behind the word mountains, far from the countries Vokalia and
-                                    Consonantia, there live the blind texts. </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 animate-box">
-                        <div class="fh5co-inner fh5co-services">
-                            <i class="icon-video"></i>
-                            <div class="holder-section">
-                                <h3>Video Editing</h3>
-                                <p>Far far away, behind the word mountains, far from the countries Vokalia and
-                                    Consonantia, there live the blind texts. </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 animate-box">
-                        <div class="fh5co-inner fh5co-services">
-                            <i class="icon-mobile"></i>
-                            <div class="holder-section">
-                                <h3>Mobile Optimization</h3>
-                                <p>Far far away, behind the word mountains, far from the countries Vokalia and
-                                    Consonantia, there live the blind texts. </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 animate-box">
-                        <div class="fh5co-inner fh5co-services">
-                            <i class="icon-gears"></i>
-                            <div class="holder-section">
-                                <h3>Search Engine Optimization</h3>
-                                <p>Far far away, behind the word mountains, far from the countries Vokalia and
-                                    Consonantia, there live the blind texts. </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 animate-box">
-                        <div class="fh5co-inner fh5co-services">
-                            <i class="icon-piechart"></i>
-                            <div class="holder-section">
-                                <h3>Web Marketing</h3>
-                                <p>Far far away, behind the word mountains, far from the countries Vokalia and
-                                    Consonantia, there live the blind texts. </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            @yield('content')
         </div>
     </div>
     <footer>
@@ -220,10 +154,10 @@ list(, $action) = explode('@', Route::getCurrentRoute()->getActionName());
     $(document).ready(function () {
         $('#phone').mask('9999-9999');
         $('#birth').mask('99/99/9999');
-      /*  $('#email').mask(" A", {
-            translation: {
-                "A": {pattern: /[\w@\-.+]/, recursive: true}
-            }
-        });*/
+        /*  $('#email').mask(" A", {
+              translation: {
+                  "A": {pattern: /[\w@\-.+]/, recursive: true}
+              }
+          });*/
     });
 </script>
