@@ -43,7 +43,7 @@ Route::get('/questions/edit/{id}', 'QuestionsController@edit');
 Route::get('/questions/delete/{id}', 'QuestionsController@delete');
 
 Route::get('/answers/form', 'AnswersController@form');
-Route::post('/answers/add', 'AnswersController@addQuestion');
+Route::post('/answers/add', 'AnswersController@addAnswer');
 Route::get('/answers/list', 'AnswersController@list');
 Route::get('/answers/edit/{id}', 'AnswersController@edit');
 Route::get('/answers/delete/{id}', 'AnswersController@delete');
