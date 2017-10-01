@@ -14,5 +14,10 @@
   "Actions": "Ações",
   "State": "Estado",
   "City": "Cidade",
-  "Birth": "Data de Nascimento"
+  "Birth": "Data de Nascimento",
+  "Add a Question": "Adicione uma pergunta",
+  "Add a Answer": "Adicione uma resposta",
+  "Category": "Categoria",
+  "Question": "Pergunta",
+  "Answer": "Resposta"
 }

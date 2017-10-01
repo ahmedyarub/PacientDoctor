@@ -68,7 +68,7 @@ class DoctorsController extends Controller
 
         DB::commit();
 
-        return view('home');
+        return view('questions.list');
 
 
     }

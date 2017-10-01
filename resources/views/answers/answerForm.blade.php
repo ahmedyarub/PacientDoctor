@@ -15,10 +15,10 @@
     @endif
     {{ Form::open(array("action" => "AnswersController@addAnswer")) }}
 
-    {{ Form::label('question', Lang::get('question'), array('class'=>'control-label')) }}
+    {{ Form::label('question', __('Question'), array('class'=>'control-label')) }}
     {{ Form::select('question', $questions) }}
     <br/>
-    {{ Form::label('answer', Lang::get('Answer'), array('class'=>'control-label')) }}
+    {{ Form::label('answer', __('Answer'), array('class'=>'control-label')) }}
     {{ Form::text('answer') }}
     <br/>
     {{ Form::submit(__('Save'), array('class' => 'btn btn-default')) }}
