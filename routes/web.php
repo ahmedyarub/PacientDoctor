@@ -17,6 +17,8 @@ Route::get('/', function () {
 
 Auth::routes();
 Route::get('/logout', 'Auth\LoginController@logout');
+Route::get('/validate_session', 'Auth\LoginController@getValidateSession');
+Route::get('/logout', 'Auth\LoginController@logout');
 
 Route::get('/doctors/form', 'DoctorsController@form');
 Route::post('/doctors/add', 'DoctorsController@addDoctor');

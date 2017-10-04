@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -34,6 +35,39 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest')->except('logout');
+        $this->middleware('guest')->except('logout', 'getValidateSession');
+    }
+
+    protected function sendLoginResponse(Request $request)
+    {
+        $this->clearLoginAttempts($request);
+
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json(['status' => 0]);
+        } else {
+            return redirect()->intended($this->redirectPath());
+        }
+    }
+
+    public function logout(Request $request)
+    {
+        $this->guard()->logout();
+
+        $request->session()->invalidate();
+
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json(['status' => 0]);
+        } else {
+            return redirect('/');
+        }
+    }
+
+    public function getValidateSession()
+    {
+        if (\Auth::check()) {
+            return response()->json(['status' => 0]);
+        } else {
+            return response()->json(['status' => 1]);
+        }
     }
 }
