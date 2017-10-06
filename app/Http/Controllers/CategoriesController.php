@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Models\Category;
 use Illuminate\Support\Facades\DB;
 
+
 class CategoriesController extends Controller
 {
     public function form(){
@@ -26,7 +27,7 @@ class CategoriesController extends Controller
 
         DB::commit();
 
-        return view('home');
+        return redirect()->action('QuestionsController@list');
 
     }
 
@@ -37,11 +38,18 @@ class CategoriesController extends Controller
         return view('categories.list', ['categories' => $categories]);
     }
 
+    public function selCategory()
+    {
+        $categories = DB::table('categories')->pluck('category', 'id');
+
+        return view('categories.selectCategory', ['categories' => $categories]);
+
+    }
 
     public function delete($id)
     {
         DB::table('categories')->delete($id);
 
-        return view('home');
+        return redirect()->action('QuestionsController@list');
     }
 }

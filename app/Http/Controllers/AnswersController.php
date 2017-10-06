@@ -35,7 +35,7 @@ class AnswersController extends Controller
 
         DB::commit();
 
-        return view('home');
+        return redirect()->action('QuestionsController@list');
 
     }
 
@@ -52,6 +52,6 @@ class AnswersController extends Controller
     {
         DB::table('answers')->delete($id);
 
-        return view('home');
+        return redirect()->action('QuestionsController@list');
     }
 }

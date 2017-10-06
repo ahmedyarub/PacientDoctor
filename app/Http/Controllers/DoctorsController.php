@@ -8,6 +8,7 @@ use App\Mail\EmailVerification;
 use Illuminate\Http\Request;
 use App\Http\Models\Doctor;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use App\User;
 use DB;
 use Mail;
@@ -68,14 +69,21 @@ class DoctorsController extends Controller
 
         DB::commit();
 
-        return view('questions.list');
+        return redirect()->action('QuestionsController@list');
 
 
     }
 
+
+    public function questionsList(){
+        $doctor_id = Auth::id();
+        echo $doctor_id;
+    }
+
+
     public function list()
     {
-        $doctors = DB::table('doctors')->get();
+        $doctors = DB::table('doctors')->leftJoin('users', 'users.id', '=', 'doctors.user_id')->get();
 
         return view('doctors.list', ['doctors' => $doctors]);
     }
@@ -84,6 +92,6 @@ class DoctorsController extends Controller
     {
         DB::table('doctors')->delete($id);
 
-        return view('home');
+        return redirect()->action('QuestionsController@list');
     }
 }

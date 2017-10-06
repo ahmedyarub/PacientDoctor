@@ -55,22 +55,22 @@ class PacientsController extends Controller
 
         $pacient->save();
 
-        $email = new EmailVerification($user);
+     /*   $email = new EmailVerification($user);
 
         $email->from('naoresponder@veus.com.br');
         $email->subject('Activation Email');
 
         Mail::to($user->email)->send($email);
-
+*/
         DB::commit();
 
-        return view('home');
+        return redirect()->action('QuestionsController@list');
 
     }
 
     public function list()
     {
-        $pacients = DB::table('pacients')->get();
+        $pacients = DB::table('pacients')->leftJoin('users', 'users.id', '=', 'pacients.user_id')->get();
         return view('pacients.list',['pacients' => $pacients]);
     }
 
@@ -78,6 +78,6 @@ class PacientsController extends Controller
     {
         DB::table('pacients')->delete($id);
 
-        return view('home');
+        return redirect()->action('QuestionsController@list');
     }
 }
