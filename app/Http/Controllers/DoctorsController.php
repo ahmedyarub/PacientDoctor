@@ -60,7 +60,7 @@ class DoctorsController extends Controller
 
         $doctor->save();
 
-        $email = new EmailVerification(new User(['email_token' => $user->email_token, 'name' => $doctor->name]));
+        $email = new EmailVerification($user);
 
         $email->from('naoresponder@veus.com.br');
         $email->subject('Activation Email');
@@ -69,9 +69,11 @@ class DoctorsController extends Controller
 
         DB::commit();
 
-        return redirect()->action('QuestionsController@list');
-
-
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json(['status' => 0]);
+        } else {
+            return redirect()->action('QuestionsController@list');
+        }
     }
 
 

@@ -55,17 +55,20 @@ class PacientsController extends Controller
 
         $pacient->save();
 
-     /*   $email = new EmailVerification($user);
+        $email = new EmailVerification($user);
 
         $email->from('naoresponder@veus.com.br');
         $email->subject('Activation Email');
 
         Mail::to($user->email)->send($email);
-*/
+
         DB::commit();
 
-        return redirect()->action('QuestionsController@list');
-
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json(['status' => 0]);
+        } else {
+            return redirect()->action('QuestionsController@list');
+        }
     }
 
     public function list()
