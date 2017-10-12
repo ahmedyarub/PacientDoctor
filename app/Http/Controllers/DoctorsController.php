@@ -29,13 +29,11 @@ class DoctorsController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'crm' => 'required|numeric',
-            'address' => 'required',
-            'email' => 'required|email',
-            'state' => 'required',
-            'city' => 'required',
-            'password' => 'required',
             'phone' => 'required',
+            'address' => 'required',
+            'specialization' => 'required',
+            'email' => 'required|email',
+            'password' => 'required',
         ]);
 
         DB::beginTransaction();
@@ -52,11 +50,9 @@ class DoctorsController extends Controller
 
         $doctor->user_id = $user->id;
         $doctor->name = $request['name'];
-        $doctor->crm = $request['crm'];
         $doctor->phone = $request['phone'];
         $doctor->address = $request['address'];
-        $doctor->state = $request['state'];
-        $doctor->city = $request['city'];
+        $doctor->specialization = $request['specialization'];
 
         $doctor->save();
 

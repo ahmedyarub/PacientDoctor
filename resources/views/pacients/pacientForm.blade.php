@@ -17,23 +17,23 @@
     {{ Form::label('name', __('Name'), array('class'=>'control-label')) }}
     {{ Form::text('name') }}
     <br/>
-    {{ Form::label('address', __('Address'), array('class'=>'control-label')) }}
-    {{ Form::text('address') }}
+    {{ Form::label('city', __('City'), array('class'=>'control-label')) }}
+    {{ Form::text('city') }}
     <br/>
-    {{ Form::label('birth', __('Birth'), array('class'=>'control-label')) }}
-    {{ Form::text('birth','', array('id'=> 'birth')) }}
+    {{ Form::label('state', __('State'), array('class'=>'control-label')) }}
+    {{ Form::text('state','', array('id'=> 'state')) }}
     <br/>
     {{ Form::label('phone', __('Phone'), array('class'=>'control-label')) }}
     {{ Form::text('phone', '', array('id'=> 'phone')) }}
+    <br/>
+    {{ Form::label('genre', __('Genre'), array('class'=>'control-label')) }}
+    {{ Form::text('genre') }}
     <br/>
     {{ Form::label('email', __('Email'), array('class'=>'control-label')) }}
     {{ Form::text('email','', array('id'=> 'email')) }}
     <br/>
     {{ Form::label('password', __('Password'), array('class'=>'control-label')) }}
     {{ Form::password('password') }}
-    <br/>
-    {{ Form::label('genre', __('Genre'), array('class'=>'control-label')) }}
-    {{ Form::text('genre') }}
     <br/>
     {{ Form::submit(__('Save'), array('class' => 'btn btn-default')) }}
     {{ Form::close() }}

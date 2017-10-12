@@ -9,6 +9,7 @@ use App\Http\Models\Pacient;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Mail;
+use App\Mail\EmailVerification;
 
 class PacientsController extends Controller
 {
@@ -27,11 +28,11 @@ class PacientsController extends Controller
         $request->validate([
             'name' => 'required',
             'genre'=> 'required',
-            'address'=> 'required',
+            'city'=> 'required',
+            'state'=> 'required',
+            'phone'=> 'required',
             'email'=> 'required|email',
             'password'=> 'required',
-            'birth'=> 'required',
-            'phone'=> 'required',
         ]);
 
         DB::beginTransaction();
@@ -49,8 +50,8 @@ class PacientsController extends Controller
         $pacient->user_id = $user->id;
         $pacient->name= $request['name'];
         $pacient->genre= $request['genre'];
-        $pacient->address= $request['address'];
-        $pacient->birth= $request['birth'];
+        $pacient->city= $request['city'];
+        $pacient->state= $request['state'];
         $pacient->phone= $request['phone'];
 
         $pacient->save();

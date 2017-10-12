@@ -16,7 +16,6 @@
     @foreach ($doctors as $doctor)
         <tr>
             <td>{{$doctor->name}}</td>
-            <td>{{$doctor->crm}}</td>
             <td>{{$doctor->email}}</td>
             <td>{{$doctor->phone}}</td>
             <td><a href='edit/{{$doctor->id}}'>{{ __('Edit')}}</a></td>

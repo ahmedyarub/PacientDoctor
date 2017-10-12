@@ -17,26 +17,20 @@
     {{ Form::label('name', Lang::get('doctors.Name'), array('class'=>'control-label')) }}
     {{ Form::text('name') }}
     <br/>
-    {{ Form::label('crm', Lang::get('doctors.Crm'), array('class'=>'control-label')) }}
-    {{ Form::text('crm') }}
+    {{ Form::label('address', __('Address'), array('class'=>'control-label')) }}
+    {{ Form::text('address') }}
+    <br/>
+    {{ Form::label('phone', __('Phone'), array('class'=>'control-label')) }}
+    {{ Form::text('phone') }}
+    <br/>
+    {{ Form::label('specialization', __('Specialization'), array('class'=>'control-label')) }}
+    {{ Form::text('specialization') }}
     <br/>
     {{ Form::label('email', __('Email'), array('class'=>'control-label')) }}
     {{ Form::text('email','', ['id'=> 'email1']) }}
     <br/>
     {{ Form::label('password', @('Password'), array('class'=>'control-label')) }}
     {{ Form::password('password') }}
-    <br/>
-    {{ Form::label('address', __('Address'), array('class'=>'control-label')) }}
-    {{ Form::text('address') }}
-    <br/>
-    {{ Form::label('state', __('State'), array('class'=>'control-label')) }}
-    {{ Form::text('state') }}
-    <br/>
-    {{ Form::label('city', __('City'), array('class'=>'control-label')) }}
-    {{ Form::text('city') }}
-    <br/>
-    {{ Form::label('phone', __('Phone'), array('class'=>'control-label')) }}
-    {{ Form::text('phone', '', array('id'=> 'phone')) }}
     <br/>
     {{ Form::submit(__('Save'), array('class' => 'btn btn-default')) }}
     {{ Form::close() }}

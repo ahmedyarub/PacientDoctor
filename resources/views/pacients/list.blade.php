@@ -17,7 +17,6 @@
             <tr>
                     <td>{{$pacient->name}}</td>
                     <td>{{$pacient->genre}}</td>
-                    <td>{{$pacient->birth}}</td>
                     <td>{{$pacient->email}}</td>
                     <td>{{$pacient->phone}}</td>
                     <td><a href='edit/{{$pacient->id}}'>{{ __('Edit')}}</a></td>
