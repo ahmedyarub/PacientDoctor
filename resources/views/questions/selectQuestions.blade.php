@@ -23,7 +23,7 @@
 
             <br />
             {{ Form::select('answers['.$question->id.']', $question->answers)}}
-
+            {{ Form::Input('text','written_answers['.$question->id.']', null)}}
 
         <br />
 

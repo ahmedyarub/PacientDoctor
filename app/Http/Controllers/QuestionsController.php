@@ -89,6 +89,7 @@ class QuestionsController extends Controller
     {
 
         $questions_answers = $request['answers'];
+        $questions_written_answers = $request['written_answers'];
 
         $category_id = $request['category_id'];
 
@@ -101,7 +102,7 @@ class QuestionsController extends Controller
         foreach ($questions_answers as $question_id => $answer_id) {
             DB::table('doubts')->insert(
                 ['category_id' => $category_id, 'doubt_id' => $doubt_id, 'pacient_id' => Auth::id(),
-                    'question_id' => $question_id, 'answer_id' => $answer_id]
+                    'question_id' => $question_id, 'answer_id' => $answer_id, 'written_answer' => $questions_written_answers[$question_id]]
             );
 
         }
@@ -109,7 +110,7 @@ class QuestionsController extends Controller
         $doctors = DB::table('doctors')->pluck('doctors.name', 'doctors.id');
 
         if ($request->wantsJson() || $request->ajax()) {
-            return response()->json(['status' => 0]);
+            return response()->json(['status' => 0, 'data' => ['doctors' => $doctors, 'doubt_id' => $doubt_id]]);
         } else {
             return view('questions.selectDoctor', ['doctors' => $doctors, 'doubt_id' => $doubt_id]);
         }
