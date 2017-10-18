@@ -31,11 +31,15 @@ class CategoriesController extends Controller
 
     }
 
-    public function list()
+    public function list(Request $request)
     {
         $categories = DB::table('categories')->get();
 
-        return view('categories.list', ['categories' => $categories]);
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json(['status' => 0, 'data' => $categories]);
+        } else {
+            return view('categories.list', ['categories' => $categories]);
+        }
     }
 
     public function selCategory()

@@ -45,7 +45,7 @@ Route::post('/questions/add', 'QuestionsController@addQuestion');
 Route::get('/questions/list', 'QuestionsController@list');
 Route::get('/questions/edit/{id}', 'QuestionsController@edit');
 Route::get('/questions/delete/{id}', 'QuestionsController@delete');
-Route::post('/questions/select_questions', 'QuestionsController@selectQuestions');
+Route::any('/questions/select_questions', 'QuestionsController@selectQuestions');
 Route::post('/questions/select_doctor', 'QuestionsController@selectDoctor');
 
 Route::any('/doubts/savedoubt', 'DoubtsController@saveDoubt');

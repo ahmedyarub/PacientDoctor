@@ -12,7 +12,8 @@ use Illuminate\Support\Facades\Auth;
 
 class QuestionsController extends Controller
 {
-    public function form(){
+    public function form()
+    {
         $categories = Category::pluck('category', 'id')->toArray();
         return view('questions.questionsForm', ['categories' => $categories]);
     }
@@ -47,21 +48,25 @@ class QuestionsController extends Controller
             'category' => 'required',
         ]);
 
+
         $questions = DB::table('questions')
             ->leftJoin('categories', 'categories.id', '=', 'questions.category_id')
-            ->select('questions.id','questions.question', 'category')->where('category_id', $request['category'])->get();
+            ->select('questions.id', 'questions.question', 'category')->where('category_id', $request['category'])->get();
 
-        $i=0;
-        while(count($questions) > $i){
+        $i = 0;
+        while (count($questions) > $i) {
             $answers = DB::table('answers')
-            ->leftJoin('questions', 'questions.id', '=', 'answers.question_id')
-                ->where('answers.question_id', $questions[$i]->id)->pluck('answers.answer','answers.id');
+                ->leftJoin('questions', 'questions.id', '=', 'answers.question_id')
+                ->where('answers.question_id', $questions[$i]->id)->pluck('answers.answer', 'answers.id');
             $questions[$i]->answers = $answers;
             $i++;
         }
 
-        return view('questions.selectQuestions', ['questions' => $questions, 'category'=> $request['category']]);
-
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json(['status' => 0, 'data' => $questions]);
+        } else {
+            return view('questions.selectQuestions', ['questions' => $questions, 'category' => $request['category']]);
+        }
     }
 
     public function list()
@@ -80,7 +85,8 @@ class QuestionsController extends Controller
         return redirect()->action('QuestionsController@list');
     }
 
-    public function selectDoctor(Request $request){
+    public function selectDoctor(Request $request)
+    {
 
         $questions_answers = $request['answers'];
 
@@ -88,20 +94,24 @@ class QuestionsController extends Controller
 
         $doubt_id = DB::table('doubts')->select('doubt_id')->max('doubt_id');
 
-        $doubt_id = ($doubt_id === NULL) ? 0 : $doubt_id+1;
+        $doubt_id = ($doubt_id === NULL) ? 0 : $doubt_id + 1;
 
 
         DB::beginTransaction();
-        foreach($questions_answers as $question_id=>$answer_id) {
+        foreach ($questions_answers as $question_id => $answer_id) {
             DB::table('doubts')->insert(
                 ['category_id' => $category_id, 'doubt_id' => $doubt_id, 'pacient_id' => Auth::id(),
-                    'question_id'=>$question_id, 'answer_id'=>$answer_id]
+                    'question_id' => $question_id, 'answer_id' => $answer_id]
             );
 
         }
         DB::commit();
         $doctors = DB::table('doctors')->pluck('doctors.name', 'doctors.id');
 
-        return view('questions.selectDoctor', ['doctors' => $doctors, 'doubt_id'=>$doubt_id]);
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json(['status' => 0]);
+        } else {
+            return view('questions.selectDoctor', ['doctors' => $doctors, 'doubt_id' => $doubt_id]);
+        }
     }
 }
