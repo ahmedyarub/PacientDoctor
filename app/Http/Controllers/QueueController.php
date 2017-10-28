@@ -22,6 +22,7 @@ class QueueController extends Controller
     public function startCall(Request $request){
         $case = Cases::find($request->case_id);
 
+        $case->evaluation = $request->evaluation;
         $case->status = 'Started';
 
         $case->save();

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AlterTableCaseAddStatus extends Migration
+class AlterTableCaseAddEvaluation extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AlterTableCaseAddStatus extends Migration
     public function up()
     {
         Schema::table('cases', function(Blueprint $table) {
-            $table->string('status');
+            $table->integer('evaluation')->nullable();
         });
     }
 
@@ -26,7 +26,7 @@ class AlterTableCaseAddStatus extends Migration
     public function down()
     {
         Schema::table('cases', function(Blueprint $table) {
-            $table->dropColumn('status');
+            $table->dropColumn('evaluation');
         });
     }
 }

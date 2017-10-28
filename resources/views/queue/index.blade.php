@@ -17,6 +17,7 @@
                 {{ Form::open(["action" => "QueueController@startCall"]) }}
                 {{ Form::hidden('case_id', $case_id) }}
                 {{Form::submit('Start Call')}}
+                {{ Form::text('evaluation', 5) }}
                 {{ Form::close() }}
             @endif
         </p>

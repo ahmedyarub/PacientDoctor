@@ -3,6 +3,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Models\Cases;
 use Illuminate\Http\Request;
 use App\Http\Models\Question;
 use App\Http\Models\Category;
@@ -94,8 +95,8 @@ class QuestionsController extends Controller
         $category_id = $request['category_id'];
 
         $user_id = Auth::id();
-        $pacient = DB::table('pacients')->where('user_id','=',$user_id)->get();
-        foreach($pacient as $pac){
+        $pacient = DB::table('pacients')->where('user_id', '=', $user_id)->get();
+        foreach ($pacient as $pac) {
             $pacient_id = $pac->id;
         }
 
@@ -112,12 +113,19 @@ class QuestionsController extends Controller
 
         DB::commit();
 
-        $doctors = DB::table('doctors')->pluck('doctors.name', 'doctors.id');
+        $doctors = DB::table('doctors')->get(['doctors.name', 'doctors.id']);
+
+        $doctors_evaluations = $doctors->map(function ($doctor) {
+            $evaluation = Cases::where('doctor_id', $doctor->id)->where('status', 'Finished')->sum('evaluation') /
+                Cases::where('doctor_id', $doctor->id)->where('status', 'Finished')->count('id');
+
+            return [$doctor->id => ($doctor->name . '(' . $evaluation . ')')];
+        });
 
         if ($request->wantsJson() || $request->ajax()) {
-            return response()->json(['status' => 0, 'data' => ['doctors' => $doctors, 'case_id' => $case_id]]);
+            return response()->json(['status' => 0, 'data' => ['doctors' => $doctors_evaluations, 'case_id' => $case_id]]);
         } else {
-            return view('questions.selectDoctor', ['doctors' => $doctors, 'case_id' => $case_id]);
+            return view('questions.selectDoctor', ['doctors' => $doctors_evaluations, 'case_id' => $case_id]);
         }
     }
 }
