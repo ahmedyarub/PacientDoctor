@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Models\Pacient;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Auth;
 
 class LoginController extends Controller
 {
@@ -43,7 +45,10 @@ class LoginController extends Controller
         $this->clearLoginAttempts($request);
 
         if ($request->wantsJson() || $request->ajax()) {
-            return response()->json(['status' => 0]);
+            $user_id = Auth::user()->id;
+
+            return response()->json(['status' => 0,
+                'user_type' => (Pacient::where('user_id', $user_id)->count() == 1 ? 0 : 1)]);
         } else {
             return redirect()->intended($this->redirectPath());
         }

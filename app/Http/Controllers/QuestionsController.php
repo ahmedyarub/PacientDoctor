@@ -99,18 +99,15 @@ class QuestionsController extends Controller
             $pacient_id = $pac->id;
         }
 
-        $created_at = date('Y-m-d H:i:s');
-
         DB::beginTransaction();
 
-        $case_id = DB::table('cases')->insertGetId(['pacient_id' => $pacient_id, 'created_at'=>$created_at]);
+        $case_id = DB::table('cases')->insertGetId(['pacient_id' => $pacient_id, 'status' => 'Pending']);
 
         foreach ($questions_answers as $question_id => $answer_id) {
             DB::table('doubts')->insert(
                 ['category_id' => $category_id, 'case_id' => $case_id, 'pacient_id' => $pacient_id,
-                    'question_id' => $question_id, 'answer_id' => $answer_id, 'created_at'=>$created_at, 'written_answer' => $questions_written_answers[$question_id]]
+                    'question_id' => $question_id, 'answer_id' => $answer_id, 'written_answer' => $questions_written_answers[$question_id]]
             );
-
         }
 
         DB::commit();

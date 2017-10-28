@@ -3,12 +3,8 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
 use Illuminate\Http\Request;
-use App\Http\Models\Pacient;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-
 
 class DoubtsController extends Controller
 {
@@ -25,7 +21,7 @@ class DoubtsController extends Controller
             ->update(['doctor_id' => $request->doctor]);
         DB::commit();
 
-        return redirect()->action('QuestionsController@list');
+        return redirect()->action('QueueController@index',['case_id' => $request->case_id]);
 
     }
 
