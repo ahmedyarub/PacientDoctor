@@ -18,9 +18,11 @@ class DoubtsController extends Controller
         DB::beginTransaction();
 
         DB::table('doubts')
-            ->where('doubt_id', $request->doubt_id)
+            ->where('case_id', $request->case_id)
             ->update(['doctor_id' => $request->doctor]);
-
+        DB::table('cases')
+            ->where('id', $request->case_id)
+            ->update(['doctor_id' => $request->doctor]);
         DB::commit();
 
         return redirect()->action('QuestionsController@list');

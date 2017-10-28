@@ -74,8 +74,22 @@ class DoctorsController extends Controller
 
 
     public function questionsList(){
-        $doctor_id = Auth::id();
-        echo $doctor_id;
+        $user_id = Auth::id();
+        $doctor = DB::table('doctors')->where('user_id','=',$user_id)->get();
+        foreach($doctor as $doc){
+            $doctor_id = $doc->id;
+        }
+
+        $doubts = DB::table('doubts')
+            ->select('doubts.doubt_id', 'pacients.name')
+            ->leftJoin('pacients', 'doubts.pacient_id', '=', 'pacients.id')
+            ->where('doctor_id','=',$doctor_id)
+            ->orderBy('doubts.created_at', 'asc')->get();
+echo '<pre>';
+print_r($doubts);
+            foreach($doubts as $doubt){
+
+            }
     }
 
 

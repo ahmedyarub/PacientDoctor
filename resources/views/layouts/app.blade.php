@@ -100,9 +100,14 @@ list(, $action) = explode('@', Route::getCurrentRoute()->getActionName());
                             <li class="{{in_array($controller, ["AnswersController"])?"active":""}}">
                                 <a href="{{URL::action("AnswersController@form")}}">Answer Registration</a>
                             </li>
-                            <li><a href="about.html">About</a></li>
+                            <li>
+                                <a href="about.html">About</a>
+                            </li>
                             <li class="{{in_array($controller, ["CategoriesController"])?"active":""}}">
                                 <a href="{{URL::action("CategoriesController@selCategory")}}">Describe Your Case</a>
+                            </li>
+                            <li class="{{in_array($controller, ["LoginController"])?"active":""}}">
+                                <a href="{{URL::action("Auth\LoginController@logout")}}"><span>Logout</span></a>
                             </li>
                         </ul>
                     </div>

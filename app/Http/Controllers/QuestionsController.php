@@ -93,26 +93,34 @@ class QuestionsController extends Controller
 
         $category_id = $request['category_id'];
 
-        $doubt_id = DB::table('doubts')->select('doubt_id')->max('doubt_id');
+        $user_id = Auth::id();
+        $pacient = DB::table('pacients')->where('user_id','=',$user_id)->get();
+        foreach($pacient as $pac){
+            $pacient_id = $pac->id;
+        }
 
-        $doubt_id = ($doubt_id === NULL) ? 0 : $doubt_id + 1;
-
+        $created_at = date('Y-m-d H:i:s');
 
         DB::beginTransaction();
+
+        $case_id = DB::table('cases')->insertGetId(['pacient_id' => $pacient_id, 'created_at'=>$created_at]);
+
         foreach ($questions_answers as $question_id => $answer_id) {
             DB::table('doubts')->insert(
-                ['category_id' => $category_id, 'doubt_id' => $doubt_id, 'pacient_id' => Auth::id(),
-                    'question_id' => $question_id, 'answer_id' => $answer_id, 'written_answer' => $questions_written_answers[$question_id]]
+                ['category_id' => $category_id, 'case_id' => $case_id, 'pacient_id' => $pacient_id,
+                    'question_id' => $question_id, 'answer_id' => $answer_id, 'created_at'=>$created_at, 'written_answer' => $questions_written_answers[$question_id]]
             );
 
         }
+
         DB::commit();
+
         $doctors = DB::table('doctors')->pluck('doctors.name', 'doctors.id');
 
         if ($request->wantsJson() || $request->ajax()) {
-            return response()->json(['status' => 0, 'data' => ['doctors' => $doctors, 'doubt_id' => $doubt_id]]);
+            return response()->json(['status' => 0, 'data' => ['doctors' => $doctors, 'case_id' => $case_id]]);
         } else {
-            return view('questions.selectDoctor', ['doctors' => $doctors, 'doubt_id' => $doubt_id]);
+            return view('questions.selectDoctor', ['doctors' => $doctors, 'case_id' => $case_id]);
         }
     }
 }

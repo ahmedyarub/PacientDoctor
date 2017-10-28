@@ -15,7 +15,7 @@
     @endif
     {{ Form::open(["action" => "DoubtsController@saveDoubt"]) }}
 
-    {{ Form::hidden('doubt_id', $doubt_id) }}
+    {{ Form::hidden('case_id', $case_id) }}
 
     {{ Form::label('doctor', __('Doctor'), array('class'=>'control-label')) }}
     {{ Form::select('doctor', $doctors, null) }}
