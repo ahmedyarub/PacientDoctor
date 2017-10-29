@@ -21,8 +21,11 @@ class DoubtsController extends Controller
             ->update(['doctor_id' => $request->doctor]);
         DB::commit();
 
-        return redirect()->action('QueueController@index',['case_id' => $request->case_id]);
-
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json(['status' => 0]);
+        } else {
+            return redirect()->action('QueueController@index', ['case_id' => $request->case_id]);
+        }
     }
 
 

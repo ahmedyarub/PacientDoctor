@@ -119,13 +119,13 @@ class QuestionsController extends Controller
             $evaluation = Cases::where('doctor_id', $doctor->id)->where('status', 'Finished')->sum('evaluation') /
                 Cases::where('doctor_id', $doctor->id)->where('status', 'Finished')->count('id');
 
-            return [$doctor->id => ($doctor->name . '(' . $evaluation . ')')];
+            return ['id' =>$doctor->id, 'name' => ($doctor->name . '(' . $evaluation . ')')];
         });
 
         if ($request->wantsJson() || $request->ajax()) {
             return response()->json(['status' => 0, 'data' => ['doctors' => $doctors_evaluations, 'case_id' => $case_id]]);
         } else {
-            return view('questions.selectDoctor', ['doctors' => $doctors_evaluations, 'case_id' => $case_id]);
+            return view('questions.selectDoctor', ['doctors' => $doctors_evaluations->pluck('name', 'id'), 'case_id' => $case_id]);
         }
     }
 }
