@@ -116,8 +116,10 @@ class QuestionsController extends Controller
         $doctors = DB::table('doctors')->get(['doctors.name', 'doctors.id']);
 
         $doctors_evaluations = $doctors->map(function ($doctor) {
+            $evaluation_count = Cases::where('doctor_id', $doctor->id)->where('status', 'Finished')->count('id');
+
             $evaluation = Cases::where('doctor_id', $doctor->id)->where('status', 'Finished')->sum('evaluation') /
-                Cases::where('doctor_id', $doctor->id)->where('status', 'Finished')->count('id');
+                ($evaluation_count == 0?1:$evaluation_count);
 
             return ['id' =>$doctor->id, 'name' => ($doctor->name . '(' . $evaluation . ')')];
         });
