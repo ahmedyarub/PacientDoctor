@@ -3,7 +3,7 @@
 @section('title', 'Answer Registration')
 
 @section('content')
-    <h1>{{__('Add a Answer')}}</h1>
+    <h1>{{__('Add an answer')}}</h1>
     @if ($errors->any())
         <div class="alert alert-danger">
             <ul>

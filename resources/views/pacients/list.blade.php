@@ -8,7 +8,7 @@
         <tr>
             <th>@lang("Name")</th>
             <th>{{ __("Genre")}}</th>
-            <th>{{ __("Birth")}}</th>
+            <th>{{ __("Date of Birth")}}</th>
             <th>{{ __("Email")}}</th>
             <th>{{ __("Phone")}}</th>
             <th colspan="2">{{ __("Actions")}}</th>

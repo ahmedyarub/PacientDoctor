@@ -14,25 +14,11 @@ list(, $action) = explode('@', Route::getCurrentRoute()->getActionName());
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Pacients & Doctors System</title>
+    <title>Family Doctor System</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Free HTML5 Template by FREEHTML5.CO"/>
     <meta name="keywords" content="free html5, free template, free bootstrap, html5, css3, mobile first, responsive"/>
     <meta name="author" content="FREEHTML5.CO"/>
-
-    <!--
-      //////////////////////////////////////////////////////
-
-      FREE HTML5 TEMPLATE
-      DESIGNED & DEVELOPED by FREEHTML5.CO
-
-      Website: 		http://freehtml5.co/
-      Email: 			info@freehtml5.co
-      Twitter: 		http://twitter.com/fh5co
-      Facebook: 		https://www.facebook.com/fh5co
-
-      //////////////////////////////////////////////////////
-       -->
 
     <!-- Facebook and Twitter integration -->
     <meta property="og:title" content=""/>
@@ -69,7 +55,23 @@ list(, $action) = explode('@', Route::getCurrentRoute()->getActionName());
     <!--[if lt IE 9]>
     <script src="{{asset('js/respond.min.js')}}"></script>
     <![endif]-->
+<style>
+    table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
 
+    td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+
+    tr:nth-child(even) {
+        background-color: #dddddd;
+    }
+</style>
 </head>
 <body>
 <div class="box-wrap">
@@ -79,36 +81,39 @@ list(, $action) = explode('@', Route::getCurrentRoute()->getActionName());
                 <div class="row">
                     <div class="col-md-3">
                         <div class="fh5co-navbar-brand">
-                            <a class="fh5co-logo" href="index.html">Pacients & Doctors </a>
+                            <img src="{{asset('images/header.jpg')}}">
                         </div>
                     </div>
                     <div class="col-md-9 main-nav">
                         <ul class="nav text-right">
-                            <li class="{{in_array($controller, ["LoginController"])?"active":""}}">
-                                <a href="{{URL::action("Auth\LoginController@login")}}"><span>Login</span></a>
-                            </li>
-                            <li><a href="services.html">Services</a></li>
-                            <li class="{{in_array($controller, ["DoctorsController"])?"active":""}}">
-                                <a href="{{URL::action("DoctorsController@form")}}">Doctor Registration</a>
-                            </li>
-                            <li class="{{in_array($controller, ["PacientsController"])?"active":""}}">
-                                <a href="{{URL::action("PacientsController@form")}}">Patient Registration</a>
-                            </li>
-                            <li class="{{in_array($controller, ["QuestionsController"])?"active":""}}">
-                                <a href="{{URL::action("QuestionsController@form")}}">Question Registration</a>
-                            </li>
-                            <li class="{{in_array($controller, ["AnswersController"])?"active":""}}">
-                                <a href="{{URL::action("AnswersController@form")}}">Answer Registration</a>
-                            </li>
-                            <li>
-                                <a href="about.html">About</a>
-                            </li>
-                            <li class="{{in_array($controller, ["CategoriesController"])?"active":""}}">
-                                <a href="{{URL::action("CategoriesController@selCategory")}}">Describe Your Case</a>
-                            </li>
-                            <li class="{{in_array($controller, ["LoginController"])?"active":""}}">
-                                <a href="{{URL::action("Auth\LoginController@logout")}}"><span>Logout</span></a>
-                            </li>
+                            @if(!\Auth::check())
+                                <li class="{{in_array($controller, ["LoginController"])?"active":""}}">
+                                    <a href="{{URL::action("Auth\LoginController@login")}}"><span>Login</span></a>
+                                </li>
+                                <li class="{{in_array($controller, ["DoctorsController"])?"active":""}}">
+                                    <a href="{{URL::action("DoctorsController@form")}}">Doctor Registration</a>
+                                </li>
+                                <li class="{{in_array($controller, ["PacientsController"])?"active":""}}">
+                                    <a href="{{URL::action("PacientsController@form")}}">Patient Registration</a>
+                                </li>
+                            @endif
+                            @if(\Auth::check())
+                                @if(\Auth::user()->admin)
+                                    <li class="{{in_array($controller, ["QuestionsController"])?"active":""}}">
+                                        <a href="{{URL::action("QuestionsController@form")}}">Question Registration</a>
+                                    </li>
+                                    <li class="{{in_array($controller, ["AnswersController"])?"active":""}}">
+                                        <a href="{{URL::action("AnswersController@form")}}">Answer Registration</a>
+                                    </li>
+                                @endif
+                                <li class="{{in_array($controller, ["CategoriesController"])?"active":""}}">
+                                    <a href="{{URL::action("CategoriesController@selCategory")}}">Describe Your Case</a>
+                                </li>
+
+                                <li class="{{in_array($controller, ["LoginController"])?"active":""}}">
+                                    <a href="{{URL::action("Auth\LoginController@logout")}}"><span>Logout</span></a>
+                                </li>
+                            @endif
                         </ul>
                     </div>
                 </div>

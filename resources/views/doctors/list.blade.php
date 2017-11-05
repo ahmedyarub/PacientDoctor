@@ -7,7 +7,6 @@
     <table>
         <tr>
             <th>{{ __("Name")}}</th>
-            <th>{{ __("CRM")}}</th>
             <th>{{ __("Email")}}</th>
             <th>{{ __("Phone")}}</th>
             <th colspan="2">{{ __("Actions")}}</th>

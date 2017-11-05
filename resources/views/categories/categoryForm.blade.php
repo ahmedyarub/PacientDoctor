@@ -14,7 +14,7 @@
         </div><br/>
     @endif
     {{ Form::open(array("action" => "CategoriesController@addCategory")) }}
-    {{ Form::label('category', Lang::get('Nome'), array('class'=>'control-label')) }}
+    {{ Form::label('category', Lang::get('Name'), array('class'=>'control-label')) }}
     {{ Form::text('category') }}
     <br/>
     {{ Form::submit(Lang::get('Save'), array('class' => 'btn btn-default')) }}
