@@ -33,7 +33,8 @@ class QuestionsController extends Controller
 
         $question->question = $request['question'];
         $question->category_id = $request['category'];
-
+        $question->choices = empty($request['choices'])?false:true;
+        $question->text = empty($request['text'])?false:true;
 
         $question->save();
 

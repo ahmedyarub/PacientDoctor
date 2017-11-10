@@ -10,7 +10,7 @@
             <th>{{ __("Question")}}</th>
             <th colspan="2">{{ __("Actions")}}</th>
         </tr>
-
+        {{ Html::linkAction('AnswersController@form','New') }}
         @foreach ($answers as $answer)
             <tr>
                 <td>{{$answer->answer}}</td>

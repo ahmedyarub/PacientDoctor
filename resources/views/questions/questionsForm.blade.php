@@ -13,6 +13,7 @@
             </ul>
         </div><br/>
     @endif
+
     {{ Form::open(array("action" => "QuestionsController@addQuestion")) }}
 
     {{ Form::label('category', __('Category'), array('class'=>'control-label')) }}
@@ -20,6 +21,12 @@
     <br/>
     {{ Form::label('question', __('Question'), array('class'=>'control-label')) }}
     {{ Form::text('question') }}
+    <br/>
+    {{ Form::label('choices', __('With choices?'), array('class'=>'control-label')) }}
+    {{ Form::checkbox('choices',null,true) }}
+    <br/>
+    {{ Form::label('text', __('With text?'), array('class'=>'control-label')) }}
+    {{ Form::checkbox('text',null,true) }}
     <br/>
     {{ Form::submit(__('Save'), array('class' => 'btn btn-default')) }}
     {{ Form::close() }}

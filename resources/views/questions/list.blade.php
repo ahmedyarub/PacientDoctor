@@ -4,6 +4,7 @@
 
 @section('content')
     <h1>{{__('Questions')}}</h1>
+    {{ Html::linkAction('QuestionsController@form','New') }}
     <table>
         <tr>
             <th>{{ __("Question")}}</th>

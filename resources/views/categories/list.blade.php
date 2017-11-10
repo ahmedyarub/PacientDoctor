@@ -9,7 +9,7 @@
             <th>{{ __("Category")}}</th>
             <th colspan="2">{{ __("Actions")}}</th>
         </tr>
-
+        {{ Html::linkAction('CategoriesController@form','New') }}
         @foreach ($categories as $category)
             <tr>
                 <td>{{$category->category}}</td>
