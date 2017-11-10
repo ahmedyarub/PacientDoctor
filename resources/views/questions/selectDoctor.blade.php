@@ -18,7 +18,7 @@
     {{ Form::hidden('case_id', $case_id) }}
 
     {{ Form::label('doctor', __('Doctor'), array('class'=>'control-label')) }}
-    {{ Form::select('doctor', $doctors, null) }}
+    {{ Form::select('doctor_id', $doctors, null) }}
     <br/>
     {{ Form::submit(__('Save'), array('class' => 'btn btn-default')) }}
     {{ Form::close() }}

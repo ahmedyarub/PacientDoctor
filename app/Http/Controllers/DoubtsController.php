@@ -15,10 +15,10 @@ class DoubtsController extends Controller
 
         DB::table('doubts')
             ->where('case_id', $request->case_id)
-            ->update(['doctor_id' => $request->doctor]);
+            ->update(['doctor_id' => $request->doctor_id]);
         DB::table('cases')
             ->where('id', $request->case_id)
-            ->update(['doctor_id' => $request->doctor]);
+            ->update(['doctor_id' => $request->doctor_id]);
         DB::commit();
 
         if ($request->wantsJson() || $request->ajax()) {
