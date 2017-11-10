@@ -3,7 +3,7 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Http\Models\Cases;
 use App\Mail\EmailVerification;
 use Illuminate\Http\Request;
 use App\Http\Models\Doctor;
@@ -73,23 +73,24 @@ class DoctorsController extends Controller
     }
 
 
-    public function questionsList(){
+    public function questionsList()
+    {
         $user_id = Auth::id();
-        $doctor = DB::table('doctors')->where('user_id','=',$user_id)->get();
-        foreach($doctor as $doc){
+        $doctor = DB::table('doctors')->where('user_id', '=', $user_id)->get();
+        foreach ($doctor as $doc) {
             $doctor_id = $doc->id;
         }
 
         $doubts = DB::table('doubts')
             ->select('doubts.doubt_id', 'pacients.name')
             ->leftJoin('pacients', 'doubts.pacient_id', '=', 'pacients.id')
-            ->where('doctor_id','=',$doctor_id)
+            ->where('doctor_id', '=', $doctor_id)
             ->orderBy('doubts.created_at', 'asc')->get();
-echo '<pre>';
-print_r($doubts);
-            foreach($doubts as $doubt){
+        echo '<pre>';
+        print_r($doubts);
+        foreach ($doubts as $doubt) {
 
-            }
+        }
     }
 
 
@@ -105,5 +106,24 @@ print_r($doubts);
         DB::table('doctors')->delete($id);
 
         return redirect()->action('QuestionsController@list');
+    }
+
+    public function nextPatient()
+    {
+        $doctor_id = Doctor::where('user_id', \Auth::user()->id)->first()->id;
+
+        $last_case = DB::table('cases')->where('doctor_id', $doctor_id)->where('status', 'Pending')->min('id');
+
+        if (empty($last_case))
+            return response()->json(['status' => 1, 'error' => 'Last case closed. No more pending cases']);
+
+        DB::table('cases')->where('id', $last_case)->update(['status' => 'Finished']);
+
+        $cur_case = DB::table('cases')->where('doctor_id', $doctor_id)->where('status', 'Pending')->min('id');
+
+        if (empty($last_case))
+            return response()->json(['status' => 1, 'error' => 'No more pending cases']);
+
+        return response()->json(['status' => 0, 'doctor_id' => $doctor_id, 'case_id' => $cur_case]);
     }
 }
