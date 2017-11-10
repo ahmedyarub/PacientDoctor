@@ -53,7 +53,7 @@ class QuestionsController extends Controller
 
         $questions = DB::table('questions')
             ->leftJoin('categories', 'categories.id', '=', 'questions.category_id')
-            ->select('questions.id', 'questions.question', 'category')->where('category_id', $request['category'])->get();
+            ->select('questions.id', 'questions.question', 'category', 'choices', 'text')->where('category_id', $request['category'])->get();
 
         $i = 0;
         while (count($questions) > $i) {

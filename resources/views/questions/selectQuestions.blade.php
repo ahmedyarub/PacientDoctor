@@ -17,15 +17,16 @@
     {{ Form::hidden('category_id', $category) }}
 
     @foreach($questions as $question)
-
         {{ $question->question }}
-
-
-            <br />
+        <br/>
+        @if($question->choices)
             {{ Form::select('answers['.$question->id.']', $question->answers)}}
-            {{ Form::Input('text','written_answers['.$question->id.']', null)}}
+        @endif
 
-        <br />
+        @if($question->text)
+            {{ Form::Input('text','written_answers['.$question->id.']', null)}}
+        @endif
+        <br/>
 
     @endforeach
 

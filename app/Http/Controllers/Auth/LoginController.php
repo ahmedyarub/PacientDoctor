@@ -43,13 +43,16 @@ class LoginController extends Controller
     protected function sendLoginResponse(Request $request)
     {
         $this->clearLoginAttempts($request);
+        $user_id = Auth::user()->id;
+        $user_type = Pacient::where('user_id', $user_id)->count() == 1 ? 0 : 1;
 
         if ($request->wantsJson() || $request->ajax()) {
-            $user_id = Auth::user()->id;
-
             return response()->json(['status' => 0,
-                'user_type' => (Pacient::where('user_id', $user_id)->count() == 1 ? 0 : 1)]);
+                'user_type' => $user_type]);
         } else {
+            if($user_type==0)
+                $this->redirectTo = '/categories/selcategory';
+
             return redirect()->intended($this->redirectPath());
         }
     }
