@@ -49,4 +49,6 @@ Route::get('/answers/delete/{id}', 'AnswersController@delete');
 Route::get('/register/verify/{token}','Auth\RegisterController@verify');
 
 Route::get('/queue/index/{case_id}', 'QueueController@index');
+Route::post('/queue/submit_evaluation', 'QueueController@submitEvaluation');
 Route::post('/queue/start_call', 'QueueController@startCall');
+Route::post('/queue/next_patient', 'QueueController@nextPatient');

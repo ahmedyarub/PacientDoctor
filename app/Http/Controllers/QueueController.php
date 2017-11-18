@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Models\Cases;
+use App\Http\Models\Doctor;
 use Illuminate\Http\Request;
+use Auth;
 
 class QueueController extends Controller
 {
@@ -26,12 +28,11 @@ class QueueController extends Controller
         }
     }
 
-    public function startCall(Request $request)
+    public function submitEvaluation(Request $request)
     {
         $case = Cases::find($request->case_id);
 
         $case->evaluation = $request->evaluation;
-        $case->status = 'Started';
 
         $case->save();
 
@@ -41,4 +42,36 @@ class QueueController extends Controller
             dd('done');
         }
     }
+
+    public function startCall(Request $request){
+        $case = Cases::find($request->case_id);
+
+        $case->status = 'Started';
+
+        $case->save();
+
+        return response()->json(['status' => 0]);
+    }
+
+    public function nextPatient(Request $request)
+    {
+        $cur_case = Cases::find($request->case_id);
+
+        if(!empty($cur_case)) {
+            $cur_case->status = 'Finished';
+
+            $cur_case->save();
+        }
+
+        $next_case = Cases::orderBy('created_at','desc')
+            ->where('status',  'Started')
+            ->where('doctor_id', Doctor::where('user_id', Auth::user()->id)->first()->id)
+            ->first();
+
+        if(empty($next_case))
+            return response()->json(['status' => 1]);
+        else
+            return response()->json(['status' => 0, 'case_id' => $next_case->id]);
+    }
+
 }
