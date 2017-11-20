@@ -43,7 +43,8 @@ class QueueController extends Controller
         }
     }
 
-    public function startCall(Request $request){
+    public function startCall(Request $request)
+    {
         $case = Cases::find($request->case_id);
 
         $case->status = 'Started';
@@ -57,18 +58,21 @@ class QueueController extends Controller
     {
         $cur_case = Cases::find($request->case_id);
 
-        if(!empty($cur_case)) {
+        if (!empty($cur_case)) {
             $cur_case->status = 'Finished';
 
             $cur_case->save();
         }
 
-        $next_case = Cases::orderBy('created_at','desc')
-            ->where('status',  'Started')
+        $next_case = Cases::orderBy('created_at', 'desc')
+            ->where(function ($query) {
+                $query->where('status', 'Started')
+                    ->orWhere('status', 'Pending');
+            })
             ->where('doctor_id', Doctor::where('user_id', Auth::user()->id)->first()->id)
             ->first();
 
-        if(empty($next_case))
+        if (empty($next_case))
             return response()->json(['status' => 1]);
         else
             return response()->json(['status' => 0, 'case_id' => $next_case->id]);
