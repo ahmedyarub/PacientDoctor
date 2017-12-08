@@ -33,8 +33,8 @@ class QuestionsController extends Controller
 
         $question->question = $request['question'];
         $question->category_id = $request['category'];
-        $question->choices = empty($request['choices'])?false:true;
-        $question->text = empty($request['text'])?false:true;
+        $question->choices = empty($request['choices']) ? false : true;
+        $question->text = empty($request['text']) ? false : true;
 
         $question->save();
 
@@ -103,11 +103,24 @@ class QuestionsController extends Controller
 
         DB::beginTransaction();
 
-        $case_id = DB::table('cases')->insertGetId(['pacient_id' => $pacient_id, 'status' => 'Pending']);
+        $case = new Cases();
+
+        $case->pacient_id = $pacient_id;
+        $case->status = 'Pending';
+
+        $case->save();
+
+        if (!empty($request->file())) {
+            $case->image = $case->id . '.' . $request->file('image')->getClientOriginalExtension();
+
+            $request->file('image')->storeAs('cases', $case->image);
+
+            $case->save();
+        }
 
         foreach ($questions_answers as $question_id => $answer_id) {
             DB::table('doubts')->insert(
-                ['category_id' => $category_id, 'case_id' => $case_id, 'pacient_id' => $pacient_id,
+                ['category_id' => $category_id, 'case_id' => $case->id, 'pacient_id' => $pacient_id,
                     'question_id' => $question_id, 'answer_id' => $answer_id, 'written_answer' => $questions_written_answers[$question_id]]
             );
         }
@@ -120,15 +133,15 @@ class QuestionsController extends Controller
             $evaluation_count = Cases::where('doctor_id', $doctor->id)->where('status', 'Finished')->count('id');
 
             $evaluation = Cases::where('doctor_id', $doctor->id)->where('status', 'Finished')->sum('evaluation') /
-                ($evaluation_count == 0?1:$evaluation_count);
+                ($evaluation_count == 0 ? 1 : $evaluation_count);
 
-            return ['id' =>$doctor->id, 'name' => ($doctor->name . '(' . $evaluation . ')')];
+            return ['id' => $doctor->id, 'name' => ($doctor->name . '(' . $evaluation . ')')];
         });
 
         if ($request->wantsJson() || $request->ajax()) {
-            return response()->json(['status' => 0, 'data' => ['doctors' => $doctors_evaluations, 'case_id' => $case_id]]);
+            return response()->json(['status' => 0, 'data' => ['doctors' => $doctors_evaluations, 'case_id' => $case->id]]);
         } else {
-            return view('questions.selectDoctor', ['doctors' => $doctors_evaluations->pluck('name', 'id'), 'case_id' => $case_id]);
+            return view('questions.selectDoctor', ['doctors' => $doctors_evaluations->pluck('name', 'id'), 'case_id' => $case->id]);
         }
     }
 }

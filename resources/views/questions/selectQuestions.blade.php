@@ -13,7 +13,7 @@
             </ul>
         </div><br/>
     @endif
-    {{ Form::open(["action" => "QuestionsController@selectDoctor"]) }}
+    {{ Form::open(["action" => "QuestionsController@selectDoctor", 'files' => true]) }}
     {{ Form::hidden('category_id', $category) }}
 
     @foreach($questions as $question)
@@ -31,7 +31,11 @@
     @endforeach
 
     <br/>
+
+    {{ Form::file('image') }}
+
     {{ Form::submit(__('Save'), array('class' => 'btn btn-default')) }}
+
     {{ Form::close() }}
 
 @endsection
