@@ -5,6 +5,7 @@ Route::get('/', function () {
 });
 
 Auth::routes();
+Route::post('/password_reset','Auth\ForgotPasswordController@sendResetLinkEmail');
 Route::get('/logout', 'Auth\LoginController@logout');
 Route::get('/validate_session', 'Auth\LoginController@getValidateSession');
 Route::get('/logout', 'Auth\LoginController@logout');
@@ -50,5 +51,8 @@ Route::get('/register/verify/{token}','Auth\RegisterController@verify');
 
 Route::get('/queue/index/{case_id}', 'QueueController@index');
 Route::post('/queue/submit_evaluation', 'QueueController@submitEvaluation');
+Route::post('/queue/submit_notes', 'QueueController@submitNotes');
+Route::post('/queue/submit_case_result', 'QueueController@submitCaseResult');
+Route::get('/queue/receive_notes/{case_id}', 'QueueController@getNotes');
 Route::post('/queue/start_call', 'QueueController@startCall');
 Route::post('/queue/next_patient', 'QueueController@nextPatient');

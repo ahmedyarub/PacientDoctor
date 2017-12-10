@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Models\Cases;
 use App\Http\Models\Doctor;
+use App\Http\Models\Doubt;
 use Illuminate\Http\Request;
 use Auth;
+use File;
 
 class QueueController extends Controller
 {
@@ -43,6 +45,49 @@ class QueueController extends Controller
         }
     }
 
+    public function submitNotes(Request $request)
+    {
+        $case = Cases::find($request->case_id);
+
+        $case->notes = $request->notes;
+
+        $case->save();
+
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json(['status' => 0]);
+        } else {
+            dd('done');
+        }
+    }
+
+    public function submitCaseResult(Request $request)
+    {
+        $case = Cases::find($request->case_id);
+
+        $case->case_result = $request->case_result;
+        $case->other_notes = $request->other_notes;
+
+        $case->save();
+
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json(['status' => 0]);
+        } else {
+            dd('done');
+        }
+    }
+
+
+    public function getNotes(Request $request)
+    {
+        $case = Cases::find($request->case_id);
+
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json(['status' => 0, 'data' => $case->notes]);
+        } else {
+            dd('done');
+        }
+    }
+
     public function startCall(Request $request)
     {
         $case = Cases::find($request->case_id);
@@ -74,8 +119,30 @@ class QueueController extends Controller
 
         if (empty($next_case))
             return response()->json(['status' => 1]);
-        else
-            return response()->json(['status' => 0, 'case_id' => $next_case->id]);
+        else {
+            $questions_answers = Doubt::leftJoin('questions', 'questions.id', 'question_id')
+                ->leftJoin('answers', 'answers.id', 'answer_id')
+                ->where('case_id', $next_case->id)
+                ->get(['question', 'answer', 'written_answer'])
+                ->reduce(function ($result, $question_answer) {
+                    if (!empty($question_answer->answer) || !empty($question_answer->written_answer))
+                        $result .= '<br>' . $question_answer->question . '<br>';
+
+                    if (!empty($question_answer->answer))
+                        $result .= $question_answer->answer . '<br>';
+
+                    if (!empty($question_answer->written_answer))
+                        $result .= $question_answer->written_answer . '<br>';
+
+                    return $result;
+                }, '');
+
+            return response()->json(['status' => 0, 'case_id' => $next_case->id,
+                'question_answer' => $questions_answers,
+                'image' => !empty($next_case->image)
+                    ? 'data:image/jpg;base64,' . base64_encode(File::get(storage_path('app/cases/' . $next_case->id . '.jpg')))
+                    : '']);
+        }
     }
 
 }

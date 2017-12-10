@@ -135,7 +135,7 @@ class QuestionsController extends Controller
             $evaluation = Cases::where('doctor_id', $doctor->id)->where('status', 'Finished')->sum('evaluation') /
                 ($evaluation_count == 0 ? 1 : $evaluation_count);
 
-            return ['id' => $doctor->id, 'name' => ($doctor->name . '(' . $evaluation . ')')];
+            return ['id' => $doctor->id, 'name' => ($doctor->name . '(stars: ' . $evaluation . ', cases: ' . $evaluation_count . ')')];
         });
 
         if ($request->wantsJson() || $request->ajax()) {
