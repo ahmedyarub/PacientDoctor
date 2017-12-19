@@ -45,7 +45,7 @@ class ForgotPasswordController extends Controller
             $user->save();
 
             \Mail::send('mail.password_reset', ['password' => $password], function ($message) use ($email) {
-                $message->from('naoresponder@veus.com.br')
+                $message->from('admin@fam-doc.com')
                     ->to($email)
                     ->subject('Password Reset');
             });

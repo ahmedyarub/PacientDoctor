@@ -58,7 +58,7 @@ class DoctorsController extends Controller
 
         $email = new EmailVerification($user);
 
-        $email->from('naoresponder@veus.com.br');
+        $email->from('admin@fam-doc.com');
         $email->subject('Activation Email');
 
         Mail::to($user->email)->send($email);
