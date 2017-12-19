@@ -166,7 +166,7 @@ class DoctorsController extends Controller
         $pacient_user = User::find(Pacient::find(Cases::find($request->case_id)->pacient_id)->user_id);
         $push_id = $pacient_user->push_id;
         if (!empty($push_id)) {
-            define('API_ACCESS_KEY', $_ENV['API_ACCESS_KEY_' . $_ENV['ECPF_AMBIENTE']]);
+            define('API_ACCESS_KEY', 'AAAADsbx6lM:APA91bEny6U-jtdm4R97DzK12aTZDjXIv_PGEcPyGu1OvdGTLTsu2mMSevAA0LdtY0lCJbKy-mb3sm4cA7uMWD0QooAiMIVOpyjmDO0ZcgmR54saLmiVstulCWHBiddEou4s0xlzp2hO');
 
             $msg = array
             (
