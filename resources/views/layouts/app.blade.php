@@ -96,6 +96,11 @@ list(, $action) = explode('@', Route::getCurrentRoute()->getActionName());
                                                 <a href="{{URL::action("AnswersController@form")}}">Answer Registration</a>
                                             </li>
                                         @endif
+                                        @if(\Auth::user()->isDoctor())
+                                        <li class="{{in_array($controller, ["DoctorsController"])?"active":""}}">
+                                            <a href="{{URL::action("DoctorsController@doctor_cases")}}">My Cases</a>
+                                        </li>
+                                        @endif
                                         <li class="{{in_array($controller, ["CategoriesController"])?"active":""}}">
                                             <a href="{{URL::action("CategoriesController@selCategory")}}">Describe Your Case</a>
                                         </li>

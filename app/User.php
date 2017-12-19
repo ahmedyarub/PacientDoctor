@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Http\Models\Doctor;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -34,4 +35,10 @@ class User extends Authenticatable
         $this->save();
     }
 
+    public function isDoctor(){
+        if(Doctor::where('user_id', $this->id)->count()>0)
+            return true;
+        else
+            return false;
+    }
 }
