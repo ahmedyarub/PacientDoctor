@@ -137,15 +137,15 @@ class DoctorsController extends Controller
         $cases = Cases::where('doctor_id', $doctor_id)
             ->leftJoin('pacients', 'pacient_id', 'pacients.id')
             ->get(['cases.id', 'pacients.name', 'cases.created_at'])
-            ->mapWithKeys(function ($case) {
-                return [$case->id => ($case->id . ' ' . $case->name . ' (' . (new Carbon\Carbon($case->created_at))->toDateString() . ')')];
+            ->map(function ($case) {
+                return ['id' => $case->id, 'name' => ($case->id . ' ' . $case->name . ' (' . (new Carbon\Carbon($case->created_at))->toDateString() . ')')];
             });
 
         if ($request->wantsJson() || $request->ajax()) {
             return response()->json(['status' => 0, 'cases' => $cases]);
         } else {
             return view('doctors.cases')
-                ->with('cases', $cases);
+                ->with('cases', $cases->pluck('name', 'id'));
         }
     }
 
