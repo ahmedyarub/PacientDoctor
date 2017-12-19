@@ -28,6 +28,6 @@ class CreateTableCases extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('cases');
     }
 }

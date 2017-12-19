@@ -17,6 +17,8 @@ Route::get('/doctors/questionslist', 'DoctorsController@questionslist');
 Route::get('/doctors/edit/{id}', 'DoctorsController@edit');
 Route::get('/doctors/delete/{id}', 'DoctorsController@list');
 Route::post('/doctors/next_patient', 'DoctorsController@nextPatient');
+Route::get('/doctors/doctor_cases', 'DoctorsController@doctor_cases');
+Route::post('/doctors/send_message', 'DoctorsController@send_message');
 
 Route::get('/pacients/form', 'PacientsController@form');
 Route::post('/pacients/add', 'PacientsController@addPacient');

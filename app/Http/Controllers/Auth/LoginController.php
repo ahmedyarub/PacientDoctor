@@ -47,6 +47,14 @@ class LoginController extends Controller
         $user_type = Pacient::where('user_id', $user_id)->count() == 1 ? 0 : 1;
 
         if ($request->wantsJson() || $request->ajax()) {
+            if(!empty($request->push_id))
+            {
+                $user = Auth::user();
+                $user->push_id = $request->push_id;
+                $user->platform = $request->platform;
+                $user->save();
+            }
+
             return response()->json(['status' => 0,
                 'user_type' => $user_type]);
         } else {

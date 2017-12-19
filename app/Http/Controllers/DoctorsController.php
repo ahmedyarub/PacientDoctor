@@ -3,7 +3,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Models\CaseMessage;
 use App\Http\Models\Cases;
+use App\Http\Models\Pacient;
 use App\Mail\EmailVerification;
 use Illuminate\Http\Request;
 use App\Http\Models\Doctor;
@@ -12,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use App\User;
 use DB;
 use Mail;
+use Carbon;
 
 class DoctorsController extends Controller
 {
@@ -125,5 +128,90 @@ class DoctorsController extends Controller
             return response()->json(['status' => 1, 'error' => 'No more pending cases']);
 
         return response()->json(['status' => 0, 'doctor_id' => $doctor_id, 'case_id' => $cur_case]);
+    }
+
+    public function doctor_cases(Request $request)
+    {
+        $doctor_id = Doctor::where('user_id', \Auth::user()->id)->first()->id;
+
+        $cases = Cases::where('doctor_id', $doctor_id)
+            ->leftJoin('pacients', 'pacients.id', 'pacients.id')
+            ->get(['cases.id', 'pacients.name', 'cases.created_at'])
+            ->mapWithKeys(function ($case) {
+                return [$case->id => ($case->id . ' ' . $case->name . ' (' . (new Carbon\Carbon($case->created_at))->toDateString() . ')')];
+            });
+
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json(['status' => 0, 'cases' => $cases]);
+        } else {
+            return view('doctors.cases')
+                ->with('cases', $cases);
+        }
+    }
+
+    public function send_message(Request $request)
+    {
+        $request->validate([
+            'case_id' => 'required',
+            'message' => 'required'
+        ]);
+
+        $case_message = new CaseMessage();
+
+        $case_message->case_id = $request->case_id;
+        $case_message->message = $request->message;
+
+        $case_message->save();
+
+        $pacient_user = User::find(Pacient::find(Cases::find($request->case_id)->pacient_id)->user_id);
+        $push_id = $pacient_user->push_id;
+        if (!empty($push_id)) {
+            define('API_ACCESS_KEY', $_ENV['API_ACCESS_KEY_' . $_ENV['ECPF_AMBIENTE']]);
+
+            $msg = array
+            (
+                'body' => $request->message,
+                'title' => 'Fam-doc Message',
+                'icon' => 'myicon',/*Default Icon*/
+                'sound' => 'mySound'/*Default sound*/
+            );
+
+            switch ($pacient_user->platform) {
+                case 'iOS':
+                    $fields = [
+                        'to' => $push_id,
+                        'notification' => $msg
+                    ];
+                    break;
+                default:
+                    $fields = [
+                        'to' => push_id,
+                        'data' => $msg
+                    ];
+            }
+
+            $headers = array
+            (
+                'Authorization: key=' . API_ACCESS_KEY,
+                'Content-Type: application/json'
+            );
+
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+            curl_exec($ch);
+            curl_close($ch);
+        }
+
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json(['status' => 0]);
+        } else {
+            return redirect()->back();
+        }
+
     }
 }
