@@ -135,7 +135,7 @@ class DoctorsController extends Controller
         $doctor_id = Doctor::where('user_id', \Auth::user()->id)->first()->id;
 
         $cases = Cases::where('doctor_id', $doctor_id)
-            ->leftJoin('pacients', 'pacients.id', 'pacients.id')
+            ->leftJoin('pacients', 'pacient_id', 'pacients.id')
             ->get(['cases.id', 'pacients.name', 'cases.created_at'])
             ->mapWithKeys(function ($case) {
                 return [$case->id => ($case->id . ' ' . $case->name . ' (' . (new Carbon\Carbon($case->created_at))->toDateString() . ')')];
