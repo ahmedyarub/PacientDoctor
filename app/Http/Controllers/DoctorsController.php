@@ -185,7 +185,7 @@ class DoctorsController extends Controller
                     break;
                 default:
                     $fields = [
-                        'to' => push_id,
+                        'to' => $push_id,
                         'data' => $msg
                     ];
             }
