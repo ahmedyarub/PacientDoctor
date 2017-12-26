@@ -105,8 +105,7 @@
             });
         }
 
-        function call(event) {
-            event.preventDefault();
+        function call() {
             $('#end_call').removeClass('hidden');
             $('#call').removeClass('hidden');
             start_call($("#case_id").val());
