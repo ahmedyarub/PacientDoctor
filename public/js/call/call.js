@@ -71,16 +71,7 @@ $(document).ready(function () {
         console.log('This peer is the initiator of room ' + room + '!');
         isChannelReady = true;
 
-        if (ringtone)
-            ringtones.playRingtone(ringtone);
-
-        var r = confirm("Accept call?");
-        if (r == true) {
-            maybeStart();
-        }
-
-        if (ringtone)
-            ringtones.stopRingtone(ringtone);
+        maybeStart();
     });
 
     socket.on('joined', function (room) {
@@ -97,40 +88,30 @@ $(document).ready(function () {
         if (message === 'got user media') {
             //maybeStart();
         } else if (message.type === 'offer') {
-            if (ringtone)
-                ringtones.playRingtone(ringtone);
-
-            var r = confirm("Accept call?");
-
-            if (ringtone)
-                ringtones.stopRingtone(ringtone);
-
-            if (r == true) {
-                console.log('Call accepted');
-                if (!isInitiator) {
-                    maybeStart();
-                }
-
-                console.log('Setting remote description');
-                pc.setRemoteDescription(new RTCSessionDescription(message));
-
-                for (var i = 0; i < iceCandidates.length; i++) {
-                    pc.addIceCandidate(iceCandidates[i]);
-                }
-
-                console.log('Sending answer to peer.');
-                pc.createAnswer().then(
-                    function (sessionDescription) {
-                        // Set Opus as the preferred codec in SDP if Opus is present.
-                        //  sessionDescription.sdp = preferOpus(sessionDescription.sdp);
-                        pc.setLocalDescription(sessionDescription);
-                        console.log('setLocalAndSendMessage sending message', sessionDescription);
-                        sendMessage(sessionDescription);
-                    }, function (error) {
-                        console.log('Failed to create session description: ' + error.toString());
-                    }
-                );
+            console.log('Call accepted');
+            if (!isInitiator) {
+                maybeStart();
             }
+
+            console.log('Setting remote description');
+            pc.setRemoteDescription(new RTCSessionDescription(message));
+
+            for (var i = 0; i < iceCandidates.length; i++) {
+                pc.addIceCandidate(iceCandidates[i]);
+            }
+
+            console.log('Sending answer to peer.');
+            pc.createAnswer().then(
+                function (sessionDescription) {
+                    // Set Opus as the preferred codec in SDP if Opus is present.
+                    //  sessionDescription.sdp = preferOpus(sessionDescription.sdp);
+                    pc.setLocalDescription(sessionDescription);
+                    console.log('setLocalAndSendMessage sending message', sessionDescription);
+                    sendMessage(sessionDescription);
+                }, function (error) {
+                    console.log('Failed to create session description: ' + error.toString());
+                }
+            );
         } else if (message.type === 'answer') {
             pc.setRemoteDescription(new RTCSessionDescription(message));
         } else if (message.type === 'candidate') {
