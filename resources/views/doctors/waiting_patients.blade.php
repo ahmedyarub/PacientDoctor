@@ -81,7 +81,7 @@
         }
 
         function submit_notes() {
-            $.post('/queue/submit_notes', {
+            $.post(public_path + '/queue/submit_notes', {
                 case_id: $("#case_id").val(),
                 notes: $("#notes").val()
             }, function (data) {
@@ -93,7 +93,7 @@
         }
 
         function send_result() {
-            $.post('/queue/submit_case_result', {
+            $.post(public_path + '/queue/submit_case_result', {
                 case_id: $("#case_id").val(),
                 case_result: $("#case_result").val(),
                 other_notes: $("#other_notes").val()
