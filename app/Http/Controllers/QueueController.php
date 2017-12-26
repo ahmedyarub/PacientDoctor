@@ -53,11 +53,7 @@ class QueueController extends Controller
 
         $case->save();
 
-        if ($request->wantsJson() || $request->ajax()) {
-            return response()->json(['status' => 0]);
-        } else {
-            dd('done');
-        }
+        return response()->json(['status' => 0]);
     }
 
     public function submitCaseResult(Request $request)
@@ -145,4 +141,42 @@ class QueueController extends Controller
         }
     }
 
+    public function case_data(Request $request)
+    {
+        $case = Cases::find($request->case_id);
+
+        $questions_answers = Doubt::leftJoin('questions', 'questions.id', 'question_id')
+            ->leftJoin('answers', 'answers.id', 'answer_id')
+            ->where('case_id', $request->case_id)
+            ->get(['question', 'answer', 'written_answer'])
+            ->reduce(function ($result, $question_answer) {
+                if (!empty($question_answer->answer) || !empty($question_answer->written_answer))
+                    $result .= '<br>' . $question_answer->question . '<br>';
+
+                if (!empty($question_answer->answer))
+                    $result .= $question_answer->answer . '<br>';
+
+                if (!empty($question_answer->written_answer))
+                    $result .= $question_answer->written_answer . '<br>';
+
+                return $result;
+            }, '');
+
+        return response()->json(['status' => 0,
+            'question_answer' => $questions_answers,
+            'image' => !empty($case->image)
+                ? 'data:image/jpg;base64,' . base64_encode(File::get(storage_path('app/cases/' . $case->id . '.jpg')))
+                : '']);
+    }
+
+    public function finishCall(Request $request)
+    {
+        $case = Cases::find($request->case_id);
+
+        $case->status = 'Finished';
+
+        $case->save();
+
+        return response()->json(['status' => 0]);
+    }
 }

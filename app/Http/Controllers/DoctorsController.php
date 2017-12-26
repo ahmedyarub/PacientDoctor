@@ -136,6 +136,7 @@ class DoctorsController extends Controller
 
         $cases = Cases::where('doctor_id', $doctor_id)
             ->leftJoin('pacients', 'pacient_id', 'pacients.id')
+            ->where('status', '!=', 'Pending')
             ->get(['cases.id', 'pacients.name', 'cases.created_at'])
             ->map(function ($case) {
                 return ['id' => $case->id, 'name' => ($case->id . ' ' . $case->name . ' (' . (new Carbon\Carbon($case->created_at))->toDateString() . ')')];
@@ -213,5 +214,24 @@ class DoctorsController extends Controller
             return redirect()->back();
         }
 
+    }
+
+    public function waiting_patients(Request $request){
+        $doctor_id = Doctor::where('user_id', \Auth::user()->id)->first()->id;
+
+        $cases = Cases::where('doctor_id', $doctor_id)
+            ->leftJoin('pacients', 'pacient_id', 'pacients.id')
+            ->where('status', 'Pending')
+            ->get(['cases.id', 'pacients.name', 'cases.created_at'])
+            ->map(function ($case) {
+                return ['id' => $case->id, 'name' => ($case->id . ' ' . $case->name . ' (' . $case->created_at . ')')];
+            });
+
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json(['status' => 0, 'cases' => $cases]);
+        } else {
+            return view('doctors.waiting_patients')
+                ->with('cases', $cases->pluck('name', 'id'));
+        }
     }
 }

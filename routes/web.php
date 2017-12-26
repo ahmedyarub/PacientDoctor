@@ -19,6 +19,7 @@ Route::get('/doctors/delete/{id}', 'DoctorsController@list');
 Route::post('/doctors/next_patient', 'DoctorsController@nextPatient');
 Route::get('/doctors/doctor_cases', 'DoctorsController@doctor_cases');
 Route::post('/doctors/send_message', 'DoctorsController@send_message');
+Route::get('/doctors/waiting_patients', 'DoctorsController@waiting_patients');
 
 Route::get('/pacients/form', 'PacientsController@form');
 Route::post('/pacients/add', 'PacientsController@addPacient');
@@ -58,3 +59,5 @@ Route::post('/queue/submit_case_result', 'QueueController@submitCaseResult');
 Route::get('/queue/receive_notes/{case_id}', 'QueueController@getNotes');
 Route::post('/queue/start_call', 'QueueController@startCall');
 Route::post('/queue/next_patient', 'QueueController@nextPatient');
+Route::get('/queue/case_data', 'QueueController@case_data');
+Route::post('/queue/finish_call', 'QueueController@finishCall');
