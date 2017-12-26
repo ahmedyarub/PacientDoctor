@@ -221,7 +221,7 @@ class DoctorsController extends Controller
 
         $cases = Cases::where('doctor_id', $doctor_id)
             ->leftJoin('pacients', 'pacient_id', 'pacients.id')
-            ->where('status', 'Pending')
+            ->where('status', 'Started')
             ->get(['cases.id', 'pacients.name', 'cases.created_at'])
             ->map(function ($case) {
                 return ['id' => $case->id, 'name' => ($case->id . ' ' . $case->name . ' (' . $case->created_at . ')')];

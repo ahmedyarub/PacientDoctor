@@ -107,8 +107,7 @@ class QueueController extends Controller
 
         $next_case = Cases::orderBy('created_at', 'desc')
             ->where(function ($query) {
-                $query->where('status', 'Started')
-                    ->orWhere('status', 'Pending');
+                $query->where('status', 'Started');
             })
             ->where('doctor_id', Doctor::where('user_id', Auth::user()->id)->first()->id)
             ->first();
