@@ -96,7 +96,6 @@ class DoctorsController extends Controller
         }
     }
 
-
     public function list()
     {
         $doctors = DB::table('doctors')->leftJoin('users', 'users.id', '=', 'doctors.user_id')->get();
@@ -132,12 +131,16 @@ class DoctorsController extends Controller
 
     public function doctor_cases(Request $request)
     {
-        $doctor_id = Doctor::where('user_id', \Auth::user()->id)->first()->id;
-
-        $cases = Cases::where('doctor_id', $doctor_id)
-            ->leftJoin('pacients', 'pacient_id', 'pacients.id')
+        $cases = Cases::leftJoin('pacients', 'pacient_id', 'pacients.id')
+            ->leftJoin('doctors', 'doctor_id', 'doctors.id')
             ->where('status', '!=', 'Pending')
-            ->get(['cases.id', 'pacients.name', 'cases.created_at'])
+            ->when(Auth::user()->isDoctor(), function ($query) {
+                $query->where('doctor_id', Doctor::where('user_id', \Auth::user()->id)->first()->id);
+            })
+            ->when(!Auth::user()->isDoctor(), function ($query) {
+                $query->where('pacient_id', Pacient::where('user_id', \Auth::user()->id)->first()->id);
+            })
+            ->get(['cases.id', Auth::user()->isDoctor()?'pacients.name':'doctors.name', 'cases.created_at'])
             ->map(function ($case) {
                 return ['id' => $case->id, 'name' => ($case->id . ' ' . $case->name . ' (' . (new Carbon\Carbon($case->created_at))->toDateString() . ')')];
             });
@@ -216,7 +219,8 @@ class DoctorsController extends Controller
 
     }
 
-    public function waiting_patients(Request $request){
+    public function waiting_patients(Request $request)
+    {
         $doctor_id = Doctor::where('user_id', \Auth::user()->id)->first()->id;
 
         $cases = Cases::where('doctor_id', $doctor_id)

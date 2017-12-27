@@ -3,7 +3,7 @@
 @section('title', 'Waiting Patients List')
 
 @section('content')
-    <h1>{{__('Cases')}}</h1>
+    <h1>{{__('Waiting Patients')}}</h1>
     {{Form::open(["action" => "QueueController@nextPatient"])}}
     {{Form::select('case_id',$cases,null,['id' => 'case_id', 'placeholder' => 'Select a case to view its data'])}}
     {{Form::close()}}
