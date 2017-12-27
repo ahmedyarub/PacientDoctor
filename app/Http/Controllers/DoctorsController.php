@@ -216,7 +216,6 @@ class DoctorsController extends Controller
         } else {
             return redirect()->back();
         }
-
     }
 
     public function waiting_patients(Request $request)

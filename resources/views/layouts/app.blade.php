@@ -150,6 +150,10 @@ list(, $action) = explode('@', Route::getCurrentRoute()->getActionName());
                                                 Case</a>
                                         </li>
 
+                                        <li class="{{$action=='profile'?"active":""}}">
+                                            <a href="{{URL::action("ProfileController@profile")}}"><span>Profile</span></a>
+                                        </li>
+
                                         <li class="{{in_array($controller, ["LoginController"])?"active":""}}">
                                             <a href="{{URL::action("Auth\LoginController@logout")}}"><span>Logout</span></a>
                                         </li>

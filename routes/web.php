@@ -9,6 +9,8 @@ Route::post('/password_reset','Auth\ForgotPasswordController@sendResetLinkEmail'
 Route::get('/logout', 'Auth\LoginController@logout');
 Route::get('/validate_session', 'Auth\LoginController@getValidateSession');
 Route::get('/logout', 'Auth\LoginController@logout');
+Route::get('/profile', 'ProfileController@profile');
+Route::post('/update_profile', 'ProfileController@update_profile');
 
 Route::get('/doctors/form', 'DoctorsController@form');
 Route::post('/doctors/add', 'DoctorsController@addDoctor');
