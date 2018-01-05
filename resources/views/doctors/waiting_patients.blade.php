@@ -3,30 +3,56 @@
 @section('title', 'Waiting Patients List')
 
 @section('content')
+    <style>
+        #wrapper {
+            width: 100%;
+            overflow: hidden; /* will contain if #first is longer than #second */
+        }
+
+        #first {
+            width: 50%;
+            float: left; /* add this */
+        }
+
+        #second {
+            overflow: hidden; /* if you don't want #second to wrap below #first */
+        }
+    </style>
     <h1>{{__('Waiting Patients')}}</h1>
     {{Form::open(["action" => "QueueController@nextPatient"])}}
-    {{Form::select('case_id',$cases,null,['id' => 'case_id', 'placeholder' => 'Select a case to view its data'])}}
+    {{Form::select('case_id',$cases,null,['id' => 'case_id', 'placeholder' => 'Select a case to view its data', 'size' => 5])}}
     {{Form::close()}}
     <div id="call_section" class="hidden">
-        <button onclick="hangup()" class="hidden" id="end_call">End Call</button>
+        <div id="wrapper">
+            <div id="first">
+                <div>Local Video</div>
+                <video id="localVideo" autoplay muted></video>
+            </div>
 
+            <div id="second">
+                <div>Remote Video</div>
+                <video id="remoteVideo" autoplay></video>
+            </div>
+        </div>
+
+        <button onclick="end_call()" class="hidden" id="end_call">End Call</button>
+        <button id="call" onclick="call()">Call</button>
+
+        <div>Notes</div>
+        <textarea id="notes" style="width:100%"></textarea>
+        <button id="submit_notes" onclick="submit_notes()">Save Notes</button>
+        @if(\Auth::user()->isDoctor())
+            <br>
+            {{Form::textarea('message',null,['id'=>'message'])}}
+            <br>
+            {{Form::button('Send Message',['id' => 'send_message'])}}
+        @endif
         <div>Please select an audio output:</div>
         <select type="select" id="audio_source"></select>
 
         <div>Please select an video output:</div>
         <select type="select" id="video_source"></select>
 
-        <div>Remote Video</div>
-        <video id="remoteVideo" autoplay></video>
-
-        <div>Local Video</div>
-        <video id="localVideo" autoplay muted></video>
-
-        <button id="call" onclick="call()">Call</button>
-
-        <div>Notes</div>
-        <textarea id="notes" style="width:100%"></textarea>
-        <button id="submit_notes" onclick="submit_notes()">Submit Notes</button>
 
         <div id="case_result_section" class="hidden">
             <div>Were you able to help the patient?</div>
@@ -67,28 +93,20 @@
             setTimeout(update_cases, 5000);
         }
 
-        function hangup(event) {
+        function end_call(event) {
             event.preventDefault();
 
-            $('#end_call').addClass('hidden');
             hangup();
-
-            $.post('/queue/finish_call', {case_id: $("#case_id").val()}, function (data) {
-                $('#case_result_section').removeClass('hidden');
-
-                alert('Call finished!');
-            });
         }
 
         function submit_notes() {
+            event.preventDefault();
+
             $.post(public_path + '/queue/submit_notes', {
                 case_id: $("#case_id").val(),
                 notes: $("#notes").val()
             }, function (data) {
-                $('#case_result_section').addClass('hidden');
-                $('#call_section').addClass('hidden');
-
-                alert('Notes submitted!');
+                alert('Notes saved successfully!');
             });
         }
 
@@ -107,7 +125,7 @@
 
         function call() {
             $('#end_call').removeClass('hidden');
-            $('#call').removeClass('hidden');
+            $('#call').addClass('hidden');
             start_call($("#case_id").val());
         }
 
@@ -134,6 +152,38 @@
                         }
                     }, "json");
             });
+
+            $("#audio_source").change(setAudioOutput);
+
+            $("#video_source").change(function () {
+                video_device_id = $('#video_source').val();
+            });
+
+            $('#send_message').click(function (event) {
+                event.preventDefault();
+
+                $.post(public_path + '/doctors/send_message',
+                    {
+                        case_id: $("#case_id").val(),
+                        message: $("#message").val()
+                    },
+                    function (data) {
+                        alert('Message sent successfully!');
+                    });
+            });
+
+            navigator.mediaDevices.enumerateDevices()
+                .then(function (deviceInfos) {
+                    for (var i = 0; i !== deviceInfos.length; ++i) {
+                        var deviceInfo = deviceInfos[i];
+
+                        if (deviceInfo.kind === 'audiooutput') {
+                            $('#audio_source').append(new Option(deviceInfo.label, deviceInfo.deviceId));
+                        } else if (deviceInfo.kind === 'videoinput') {
+                            $('#video_source').append(new Option(deviceInfo.label, deviceInfo.deviceId));
+                        }
+                    }
+                });
 
             setTimeout(update_cases, 5000);
         });

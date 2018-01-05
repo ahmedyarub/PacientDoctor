@@ -245,7 +245,7 @@ function createPeerConnection() {
 
 function setAudioOutput() {
     var tmp = document.querySelector('#remoteVideo');
-    tmp.setSinkId(audio_device_id);
+    tmp.setSinkId($('#audio_source').val());
 }
 
 function handleCreateOfferError(event) {
@@ -317,6 +317,15 @@ function stop() {
     // isVideoMuted = false;
     pc.close();
     pc = null;
+
+    $('#end_call').addClass('hidden');
+    $('#call').removeClass('hidden');
+
+    $.post('/queue/finish_call', {case_id: $("#case_id").val()}, function (data) {
+        $('#case_result_section').removeClass('hidden');
+
+        alert('Call finished!');
+    });
 }
 
 ///////////////////////////////////////////
