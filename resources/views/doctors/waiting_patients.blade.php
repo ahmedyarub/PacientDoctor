@@ -93,9 +93,7 @@
             setTimeout(update_cases, 5000);
         }
 
-        function end_call(event) {
-            event.preventDefault();
-
+        function end_call() {
             hangup();
         }
 
