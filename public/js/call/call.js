@@ -320,6 +320,7 @@ function stop() {
 
     $('#end_call').addClass('hidden');
     $('#call').removeClass('hidden');
+    $('#case_id').removeClass('hidden');
 
     $.post('/queue/finish_call', {case_id: $("#case_id").val()}, function (data) {
         $('#case_result_section').removeClass('hidden');

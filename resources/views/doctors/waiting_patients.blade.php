@@ -4,17 +4,17 @@
 
 @section('content')
     <style>
-        #wrapper {
+        .wrapper {
             width: 100%;
             overflow: hidden; /* will contain if #first is longer than #second */
         }
 
-        #first {
+        .first {
             width: 50%;
             float: left; /* add this */
         }
 
-        #second {
+        .second {
             overflow: hidden; /* if you don't want #second to wrap below #first */
         }
     </style>
@@ -23,36 +23,46 @@
     {{Form::select('case_id',$cases,null,['id' => 'case_id', 'placeholder' => 'Select a case to view its data', 'size' => 5])}}
     {{Form::close()}}
     <div id="call_section" class="hidden">
-        <div id="wrapper">
-            <div id="first">
+        <div class="wrapper">
+            <div class="first">
                 <div>Local Video</div>
                 <video id="localVideo" autoplay muted></video>
             </div>
 
-            <div id="second">
+            <div class="second">
                 <div>Remote Video</div>
                 <video id="remoteVideo" autoplay></video>
             </div>
         </div>
 
-        <button onclick="end_call()" class="hidden" id="end_call">End Call</button>
         <button id="call" onclick="call()">Call</button>
 
-        <div>Notes</div>
-        <textarea id="notes" style="width:100%"></textarea>
-        <button id="submit_notes" onclick="submit_notes()">Save Notes</button>
-        @if(\Auth::user()->isDoctor())
-            <br>
-            {{Form::textarea('message',null,['id'=>'message'])}}
-            <br>
-            {{Form::button('Send Message',['id' => 'send_message'])}}
-        @endif
-        <div>Please select an audio output:</div>
-        <select type="select" id="audio_source"></select>
+        <div class="wrapper">
+            <div class="first">
+                <div id="case_data" class="hidden">
+                    <div id="questions_answers_section">
 
-        <div>Please select an video output:</div>
-        <select type="select" id="video_source"></select>
+                    </div>
+                    <div id="image_section">
+                        <img id="image" src="" style="max-height:500px;">
+                    </div>
+                </div>
+                <div>Notes</div>
+                <textarea id="notes" style="width:100%"></textarea>
+                <button id="submit_notes" onclick="submit_notes()">Save Notes</button>
+            </div>
 
+            <div class="second">
+                @if(\Auth::user()->isDoctor())
+                    <br>
+                    {{Form::textarea('message',null,['id'=>'message'])}}
+                    <br>
+                    {{Form::button('Send Message',['id' => 'send_message'])}}
+                @endif
+            </div>
+        </div>
+
+        <button onclick="end_call()" class="hidden" id="end_call">End Call</button>
 
         <div id="case_result_section" class="hidden">
             <div>Were you able to help the patient?</div>
@@ -64,15 +74,14 @@
             <textarea id="other_notes" style="width:100%"></textarea>
             <button onclick="send_result()">Send Result</button>
         </div>
-    </div>
-    <div id="case_data" class="hidden">
-        <div id="questions_answers_section">
 
-        </div>
-        <div id="image_section">
-            <img id="image" src="">
-        </div>
+        <div>Please select an audio output:</div>
+        <select type="select" id="audio_source"></select>
+
+        <div>Please select an video output:</div>
+        <select type="select" id="video_source"></select>
     </div>
+
     <script>
         function update_cases() {
             $.get(public_path + '/doctors/waiting_patients',
@@ -124,6 +133,8 @@
         function call() {
             $('#end_call').removeClass('hidden');
             $('#call').addClass('hidden');
+            $('#case_id').addClass('hidden');
+
             start_call($("#case_id").val());
         }
 
