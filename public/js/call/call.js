@@ -319,6 +319,7 @@ function stop() {
     pc = null;
 
     $('#end_call').addClass('hidden');
+    $('#call_section').addClass('hidden');
     $('#call').removeClass('hidden');
     $('#case_id').removeClass('hidden');
 

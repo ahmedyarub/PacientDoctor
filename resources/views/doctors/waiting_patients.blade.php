@@ -7,15 +7,18 @@
         .wrapper {
             width: 100%;
             overflow: hidden; /* will contain if #first is longer than #second */
+            border: 1px solid black;
         }
 
         .first {
             width: 50%;
             float: left; /* add this */
+            border: 1px solid black;
         }
 
         .second {
             overflow: hidden; /* if you don't want #second to wrap below #first */
+            border: 1px solid black;
         }
     </style>
     <h1>{{__('Waiting Patients')}}</h1>
@@ -47,9 +50,9 @@
                         <img id="image" src="" style="max-height:500px;">
                     </div>
                 </div>
-                <div>Notes</div>
+                <div>Journal</div>
                 <textarea id="notes" style="width:100%"></textarea>
-                <button id="submit_notes" onclick="submit_notes()">Save Notes</button>
+                <button id="submit_notes" onclick="submit_notes()">Save Journal</button>
             </div>
 
             <div class="second">
@@ -64,22 +67,26 @@
 
         <button onclick="end_call()" class="hidden" id="end_call">End Call</button>
 
-        <div id="case_result_section" class="hidden">
-            <div>Were you able to help the patient?</div>
-            <select id="case_result">
-                <option value="yes">Yes</option>
-                <option value="no">No</option>
-                <option value="other">other</option>
-            </select>
-            <textarea id="other_notes" style="width:100%"></textarea>
-            <button onclick="send_result()">Send Result</button>
+        <button onclick="toggle_configuration()" id="configuration">Configuration</button>
+
+        <div class="hidden" id="configuration_section">
+            <div>Please select an audio output:</div>
+            <select type="select" id="audio_source"></select>
+
+            <div>Please select an video output:</div>
+            <select type="select" id="video_source"></select>
         </div>
+    </div>
 
-        <div>Please select an audio output:</div>
-        <select type="select" id="audio_source"></select>
-
-        <div>Please select an video output:</div>
-        <select type="select" id="video_source"></select>
+    <div id="case_result_section" class="hidden">
+        <div>Were you able to help the patient?</div>
+        <select id="case_result">
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+            <option value="other">other</option>
+        </select>
+        <textarea id="other_notes" style="width:100%"></textarea>
+        <button onclick="send_result()">Send Result</button>
     </div>
 
     <script>
@@ -102,6 +109,10 @@
             setTimeout(update_cases, 5000);
         }
 
+        function toggle_configuration(){
+            $('#configuration_section').toggleClass('hidden');
+        }
+
         function end_call() {
             hangup();
         }
@@ -113,7 +124,7 @@
                 case_id: $("#case_id").val(),
                 notes: $("#notes").val()
             }, function (data) {
-                alert('Notes saved successfully!');
+                alert('Journal saved successfully!');
             });
         }
 
@@ -124,7 +135,6 @@
                 other_notes: $("#other_notes").val()
             }, function (data) {
                 $('#case_result_section').addClass('hidden');
-                $('#call_section').addClass('hidden');
 
                 alert('Call result submitted!');
             });
