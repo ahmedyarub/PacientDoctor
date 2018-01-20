@@ -157,6 +157,8 @@ function initiate_call(case_id) {
 }
 
 function start_call(case_id) {
+    playAudio(ringtone_path);
+
     iceCandidates = new Array();
     socket.emit('create or join', case_id);
     console.log('Attempted to create or  join room', case_id);
@@ -228,6 +230,8 @@ function createPeerConnection() {
             remoteStream = event.stream;
 
             call_status = 'In Progress';
+
+            myAudio.stop();
         }
         ;
 
@@ -323,7 +327,7 @@ function stop() {
     $('#call').removeClass('hidden');
     $('#case_id').removeClass('hidden');
 
-    $.post('/queue/finish_call', {case_id: $("#case_id").val()}, function (data) {
+    $.post(public_path + '/queue/finish_call', {case_id: $("#case_id").val()}, function (data) {
         $('#case_result_section').removeClass('hidden');
 
         alert('Call finished!');

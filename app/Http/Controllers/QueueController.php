@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Models\Cases;
 use App\Http\Models\Doctor;
 use App\Http\Models\Doubt;
+use App\User;
 use Illuminate\Http\Request;
 use Auth;
 use File;
@@ -91,6 +92,50 @@ class QueueController extends Controller
         $case->status = 'Started';
 
         $case->save();
+
+        $doctor_user = User::find(Doctor::find(Cases::find($request->case_id)->doctor_id)->user_id);
+        $push_id = $doctor_user->push_id;
+        if (!empty($push_id)) {
+            define('API_ACCESS_KEY', 'AAAADsbx6lM:APA91bEny6U-jtdm4R97DzK12aTZDjXIv_PGEcPyGu1OvdGTLTsu2mMSevAA0LdtY0lCJbKy-mb3sm4cA7uMWD0QooAiMIVOpyjmDO0ZcgmR54saLmiVstulCWHBiddEou4s0xlzp2hO');
+
+            $msg = array
+            (
+                'body' => "New patient in queue!",
+                'title' => 'Fam-doc Message',
+                'icon' => 'myicon',/*Default Icon*/
+                'sound' => 'mySound'/*Default sound*/
+            );
+
+            switch ($doctor_user->platform) {
+                case 'iOS':
+                    $fields = [
+                        'to' => $push_id,
+                        'notification' => $msg
+                    ];
+                    break;
+                default:
+                    $fields = [
+                        'to' => $push_id,
+                        'data' => $msg
+                    ];
+            }
+
+            $headers = array
+            (
+                'Authorization: key=' . API_ACCESS_KEY,
+                'Content-Type: application/json'
+            );
+
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+            curl_exec($ch);
+            curl_close($ch);
+        }
 
         return response()->json(['status' => 0]);
     }

@@ -28,12 +28,12 @@
     <div id="call_section" class="hidden">
         <div class="wrapper">
             <div class="first">
-                <div>Local Video</div>
+                <div>Your Video</div>
                 <video id="localVideo" autoplay muted></video>
             </div>
 
             <div class="second">
-                <div>Remote Video</div>
+                <div id="remote_video_label">Patient's Video</div>
                 <video id="remoteVideo" autoplay></video>
             </div>
         </div>
@@ -42,6 +42,18 @@
 
         <div class="wrapper">
             <div class="first">
+                @if(\Auth::user()->isDoctor())
+                    <br>
+                    {{Form::textarea('message',null,['id'=>'message'])}}
+                    <br>
+                    {{Form::button('Send Message',['id' => 'send_message'])}}
+                @endif
+                <div>Journal</div>
+                <textarea id="notes" style="width:100%"></textarea>
+                <button id="submit_notes" onclick="submit_notes()">Save Journal</button>
+            </div>
+
+            <div class="second">
                 <div id="case_data" class="hidden">
                     <div id="questions_answers_section">
 
@@ -50,18 +62,6 @@
                         <img id="image" src="" style="max-height:500px;">
                     </div>
                 </div>
-                <div>Journal</div>
-                <textarea id="notes" style="width:100%"></textarea>
-                <button id="submit_notes" onclick="submit_notes()">Save Journal</button>
-            </div>
-
-            <div class="second">
-                @if(\Auth::user()->isDoctor())
-                    <br>
-                    {{Form::textarea('message',null,['id'=>'message'])}}
-                    <br>
-                    {{Form::button('Send Message',['id' => 'send_message'])}}
-                @endif
             </div>
         </div>
 
@@ -90,6 +90,18 @@
     </div>
 
     <script>
+        var ringtone_path ='{{asset('ringtone.mp3')}}';
+        var myAudio;
+
+        function playAudio(path){
+            myAudio = new Audio(path);
+            myAudio.addEventListener('ended', function() {
+                this.currentTime = 0;
+                this.play();
+            }, false);
+            myAudio.play();
+        }
+
         function update_cases() {
             $.get(public_path + '/doctors/waiting_patients',
                 {}, function (data) {
@@ -149,6 +161,10 @@
         }
 
         $(document).ready(function () {
+            @if(!\Auth::user()->isDoctor())
+            $('#remote_video_label').text("Doctor's Video")
+            @endif
+
             $("#case_id").change(function () {
                 $('#case_data').addClass('hidden');
                 $('#call_section').addClass('hidden');
