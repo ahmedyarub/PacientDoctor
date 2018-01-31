@@ -60,6 +60,6 @@ Route::post('/queue/submit_notes', 'QueueController@submitNotes');
 Route::post('/queue/submit_case_result', 'QueueController@submitCaseResult');
 Route::get('/queue/receive_notes/{case_id}', 'QueueController@getNotes');
 Route::post('/queue/start_call', 'QueueController@startCall');
-Route::post('/queue/next_patient', 'QueueController@nextPatient');
+Route::get('/queue/next_patient', 'QueueController@nextPatient');
 Route::get('/queue/case_data', 'QueueController@case_data');
 Route::post('/queue/finish_call', 'QueueController@finishCall');

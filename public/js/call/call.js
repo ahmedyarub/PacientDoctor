@@ -325,9 +325,9 @@ function stop() {
     $('#end_call').addClass('hidden');
     $('#call_section').addClass('hidden');
     $('#call').removeClass('hidden');
-    $('#case_id').removeClass('hidden');
+    $('#next_case').removeClass('hidden');
 
-    $.post(public_path + '/queue/finish_call', {case_id: $("#case_id").val()}, function (data) {
+    $.post(public_path + '/queue/finish_call', {case_id: case_id}, function (data) {
         $('#case_result_section').removeClass('hidden');
 
         alert('Call finished!');

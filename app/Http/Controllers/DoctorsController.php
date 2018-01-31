@@ -222,19 +222,16 @@ class DoctorsController extends Controller
     {
         $doctor_id = Doctor::where('user_id', \Auth::user()->id)->first()->id;
 
-        $cases = Cases::where('doctor_id', $doctor_id)
+        $cases_count = Cases::where('doctor_id', $doctor_id)
             ->leftJoin('pacients', 'pacient_id', 'pacients.id')
             ->where('status', 'Started')
-            ->get(['cases.id', 'pacients.name', 'cases.created_at'])
-            ->map(function ($case) {
-                return ['id' => $case->id, 'name' => ($case->id . ' ' . $case->name . ' (' . $case->created_at . ')')];
-            });
+            ->count();
 
         if ($request->wantsJson() || $request->ajax()) {
-            return response()->json(['status' => 0, 'cases' => $cases]);
+            return response()->json(['status' => 0, 'cases_count' => $cases_count]);
         } else {
             return view('doctors.waiting_patients')
-                ->with('cases', $cases->pluck('name', 'id'));
+                ->with('cases_count', $cases_count);
         }
     }
 }

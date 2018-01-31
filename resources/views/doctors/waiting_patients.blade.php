@@ -23,7 +23,9 @@
     </style>
     <h1>{{__('Waiting Patients')}}</h1>
     {{Form::open(["action" => "QueueController@nextPatient"])}}
-    {{Form::select('case_id',$cases,null,['id' => 'case_id', 'placeholder' => 'Select a case to view its data', 'size' => 5])}}
+    {{Form::label('cases_count','Cases in queue: ',['id' => 'cases_count'])}}
+    <br>
+    {{Form::button('Next Case',['id' => 'next_case'])}}
     {{Form::close()}}
     <div id="call_section" class="hidden">
         <div class="wrapper">
@@ -90,12 +92,14 @@
     </div>
 
     <script>
-        var ringtone_path ='{{asset('ringtone.mp3')}}';
+        var ringtone_path = '{{asset('ringtone.mp3')}}';
         var myAudio;
+        var cases_count = 0;
+        var case_id = null;
 
-        function playAudio(path){
+        function playAudio(path) {
             myAudio = new Audio(path);
-            myAudio.addEventListener('ended', function() {
+            myAudio.addEventListener('ended', function () {
                 this.currentTime = 0;
                 this.play();
             }, false);
@@ -106,12 +110,10 @@
             $.get(public_path + '/doctors/waiting_patients',
                 {}, function (data) {
                     if (data.status == 0) {
-                        if ($('#case_id option').size() - 1 != data.cases.length) {
-                            $('#case_id').find('option').not(':first').remove();
+                        if (cases_count != data.cases_count) {
+                            cases_count = data.cases_count;
 
-                            $.each(data.cases, function (index) {
-                                $('#case_id').append(new Option(data.cases[index].name, data.cases[index].id));
-                            });
+                            $('#cases_count').text('Cases in queue: ' + cases_count);
 
                             alert('Cases updated!');
                         }
@@ -121,7 +123,7 @@
             setTimeout(update_cases, 5000);
         }
 
-        function toggle_configuration(){
+        function toggle_configuration() {
             $('#configuration_section').toggleClass('hidden');
         }
 
@@ -133,7 +135,7 @@
             event.preventDefault();
 
             $.post(public_path + '/queue/submit_notes', {
-                case_id: $("#case_id").val(),
+                case_id: case_id,
                 notes: $("#notes").val()
             }, function (data) {
                 alert('Journal saved successfully!');
@@ -142,7 +144,7 @@
 
         function send_result() {
             $.post(public_path + '/queue/submit_case_result', {
-                case_id: $("#case_id").val(),
+                case_id: case_id,
                 case_result: $("#case_result").val(),
                 other_notes: $("#other_notes").val()
             }, function (data) {
@@ -155,9 +157,9 @@
         function call() {
             $('#end_call').removeClass('hidden');
             $('#call').addClass('hidden');
-            $('#case_id').addClass('hidden');
+            $('#next_case').addClass('hidden');
 
-            start_call($("#case_id").val());
+            start_call(case_id);
         }
 
         $(document).ready(function () {
@@ -165,15 +167,22 @@
             $('#remote_video_label').text("Doctor's Video")
             @endif
 
-            $("#case_id").change(function () {
+            $("#audio_source").change(setAudioOutput);
+
+            $("#video_source").change(function () {
+                video_device_id = $('#video_source').val();
+            });
+
+            $('#next_case').click(function(even){
                 $('#case_data').addClass('hidden');
                 $('#call_section').addClass('hidden');
 
-                $.get(public_path + '/queue/case_data',
+                $.get(public_path + '/queue/next_patient',
                     {
-                        case_id: $("#case_id").val()
                     }, function (data) {
                         if (data.status == 0) {
+                            case_id = data.case_id;
+
                             var case_text = '';
 
                             $('#questions_answers_section').html(data.question_answer);
@@ -183,15 +192,9 @@
                             $('#case_data').removeClass('hidden');
                             $('#call_section').removeClass('hidden');
                         } else {
-                            alert('Error getting case data!');
+                            alert('No more cases!');
                         }
                     }, "json");
-            });
-
-            $("#audio_source").change(setAudioOutput);
-
-            $("#video_source").change(function () {
-                video_device_id = $('#video_source').val();
             });
 
             $('#send_message').click(function (event) {
@@ -199,7 +202,7 @@
 
                 $.post(public_path + '/doctors/send_message',
                     {
-                        case_id: $("#case_id").val(),
+                        case_id: case_id,
                         message: $("#message").val()
                     },
                     function (data) {

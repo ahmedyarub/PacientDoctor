@@ -142,14 +142,6 @@ class QueueController extends Controller
 
     public function nextPatient(Request $request)
     {
-        $cur_case = Cases::find($request->case_id);
-
-        if (!empty($cur_case)) {
-            $cur_case->status = 'Finished';
-
-            $cur_case->save();
-        }
-
         $next_case = Cases::orderBy('created_at', 'desc')
             ->where(function ($query) {
                 $query->where('status', 'Started');
@@ -162,7 +154,7 @@ class QueueController extends Controller
         else {
             $questions_answers = Doubt::leftJoin('questions', 'questions.id', 'question_id')
                 ->leftJoin('answers', 'answers.id', 'answer_id')
-                ->where('case_id', $next_case->id)
+                ->where('case_id', $request->case_id)
                 ->get(['question', 'answer', 'written_answer'])
                 ->reduce(function ($result, $question_answer) {
                     if (!empty($question_answer->answer) || !empty($question_answer->written_answer))
@@ -177,8 +169,9 @@ class QueueController extends Controller
                     return $result;
                 }, '');
 
-            return response()->json(['status' => 0, 'case_id' => $next_case->id,
+            return response()->json(['status' => 0,
                 'question_answer' => $questions_answers,
+                'case_id' => $next_case->id,
                 'image' => !empty($next_case->image)
                     ? 'data:image/jpg;base64,' . base64_encode(File::get(storage_path('app/cases/' . $next_case->id . '.jpg')))
                     : '']);
