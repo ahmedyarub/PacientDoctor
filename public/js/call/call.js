@@ -231,7 +231,7 @@ function createPeerConnection() {
 
             call_status = 'In Progress';
 
-            myAudio.stop();
+            myAudio.pause();
         }
         ;
 
