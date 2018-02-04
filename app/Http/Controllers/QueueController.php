@@ -140,7 +140,7 @@ class QueueController extends Controller
         return response()->json(['status' => 0]);
     }
 
-    public function nextPatient(Request $request)
+    public function nextPatient()
     {
         $next_case = Cases::orderBy('created_at', 'desc')
             ->where(function ($query) {
@@ -154,7 +154,7 @@ class QueueController extends Controller
         else {
             $questions_answers = Doubt::leftJoin('questions', 'questions.id', 'question_id')
                 ->leftJoin('answers', 'answers.id', 'answer_id')
-                ->where('case_id', $request->case_id)
+                ->where('case_id', $next_case->id)
                 ->get(['question', 'answer', 'written_answer'])
                 ->reduce(function ($result, $question_answer) {
                     if (!empty($question_answer->answer) || !empty($question_answer->written_answer))
